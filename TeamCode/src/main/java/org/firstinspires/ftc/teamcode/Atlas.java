@@ -114,8 +114,8 @@ public class Atlas extends OpMode
             BackRightDrive.setPower(gamepad1.right_stick_x);
         } else if (gamepad1.right_stick_y != 0) {
             FrontLeftDrive.setPower(gamepad1.right_stick_x);
-            BackLeftDrive.setPower(-gamepad1.right_stick_x);
-            FrontRightDrive.setPower(-gamepad1.right_stick_x);
+            BackLeftDrive.setPower(gamepad1.right_stick_x);
+            FrontRightDrive.setPower(gamepad1.right_stick_x);
             BackRightDrive.setPower(gamepad1.right_stick_x);
         } else {
             double leftPower;
