@@ -49,7 +49,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Spud \uD83E\uDD54", group="Linear Opmode")
+@TeleOp(name="Spud \uD83C\uDF60", group="Linear Opmode")
 public class Spud extends LinearOpMode {
 
     // Declare OpMode members.
@@ -69,8 +69,8 @@ public class Spud extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         FrontLeftDrive = hardwareMap.get(DcMotor.class, "FrontLeft");
         FrontRightDrive = hardwareMap.get(DcMotor.class, "FrontRight");
-        BackLeftDrive = hardwareMap.get(DcMotor.class, "FrontLeft");
-        BackRightDrive = hardwareMap.get(DcMotor.class, "FrontRight");
+        BackLeftDrive = hardwareMap.get(DcMotor.class, "BackLeft");
+        BackRightDrive = hardwareMap.get(DcMotor.class, "BackRight");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
