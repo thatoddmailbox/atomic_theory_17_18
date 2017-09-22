@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -49,7 +50,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Atlas \uD83C\uDF0E", group="Iterative Opmode")
+@TeleOp(name="Hagrid \uD83D\uDC82\u200D♂️", group="Iterative Opmode")
 public class Atlas extends OpMode
 {
     // Declare OpMode members.
@@ -59,6 +60,8 @@ public class Atlas extends OpMode
     private DcMotor BackLeftDrive = null;
     private DcMotor BackRightDrive = null;
 
+    private Servo LeftArmServo = null;
+    private Servo RightArmServo = null;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -74,6 +77,9 @@ public class Atlas extends OpMode
         BackLeftDrive = hardwareMap.get(DcMotor.class, "BackLeft");
         BackRightDrive = hardwareMap.get(DcMotor.class, "BackRight");
 
+        LeftArmServo = hardwareMap.get(Servo.class, "LeftArm");
+        LeftArmServo = hardwareMap.get(Servo.class, "LeftArm");
+
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -81,6 +87,9 @@ public class Atlas extends OpMode
         FrontRightDrive.setDirection(DcMotor.Direction.REVERSE);
         BackLeftDrive.setDirection(DcMotor.Direction.FORWARD);
         BackRightDrive.setDirection(DcMotor.Direction.REVERSE);
+
+        LeftArmServo.setDirection(Servo.Direction.FORWARD);
+        RightArmServo.setDirection(Servo.Direction.REVERSE);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -141,6 +150,21 @@ public class Atlas extends OpMode
             BackLeftDrive.setPower(leftPower);
             BackRightDrive.setPower(rightPower);
         }
+
+        if (gamepad1.right_trigger > 0) {
+            double LeftPosition = LeftArmServo.getPosition();
+            double RightPosition = RightArmServo.getPosition();
+            LeftArmServo.setPosition(LeftPosition + 0.05);
+            RightArmServo.setPosition(RightPosition + 0.05);
+        }
+
+        if (gamepad1.right_trigger > 0) {
+            double LeftPosition = LeftArmServo.getPosition();
+            double RightPosition = RightArmServo.getPosition();
+            LeftArmServo.setPosition(LeftPosition - 0.05);
+            RightArmServo.setPosition(RightPosition - 0.05);
+        }
+
         telemetry.addData("Status", "Run Time: " + runtime.toString());
     }
 
