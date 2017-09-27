@@ -51,7 +51,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Hagrid \uD83D\uDC82\u200D♂️", group="Iterative Opmode")
-public class Atlas extends OpMode
+public class Hagrid extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
