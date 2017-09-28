@@ -42,13 +42,3 @@ public class Utils {
         return (deg180 < 0 ? 180 + (deg180 * -1) : deg180);
     }
 }
-
-class ShowToastExtra {
-    public String message;
-    public int duration;
-
-    public ShowToastExtra(String m, int d) {
-        this.message = m;
-        this.duration = d;
-    }
-}
