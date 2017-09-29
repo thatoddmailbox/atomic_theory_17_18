@@ -63,7 +63,7 @@ public class PixyCam extends Sensor {
 
     // interface methods
     public byte readByte() {
-        return _device.read8(0);
+        return _device.read(0, 1)[0];
     }
 
     public short readShort() {
@@ -97,6 +97,7 @@ public class PixyCam extends Sensor {
         if (!_hasReadStartOfFrame) {
             // read to the FRAME sync word
             readToFrame();
+            readShort();
         }
 
         while (true) {
