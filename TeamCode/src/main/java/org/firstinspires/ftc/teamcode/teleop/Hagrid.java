@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -28,8 +28,6 @@ public class Hagrid extends OpMode
      */
     @Override
     public void init() {
-        telemetry.addData("Status", "Initialized");
-
         FrontLeftDrive = hardwareMap.get(DcMotor.class, "FrontLeft");
         FrontRightDrive = hardwareMap.get(DcMotor.class, "FrontRight");
         BackLeftDrive = hardwareMap.get(DcMotor.class, "BackLeft");
@@ -39,7 +37,6 @@ public class Hagrid extends OpMode
 
         LeftArmServo = hardwareMap.get(Servo.class, "LeftArm");
         RightArmServo = hardwareMap.get(Servo.class, "RightArm");
-
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -76,7 +73,6 @@ public class Hagrid extends OpMode
      */
     @Override
     public void loop() {
-        // Setup a variable for each drive wheel to save power level for telemetry
         if (gamepad1.right_stick_x != 0) {
             FrontLeftDrive.setPower(gamepad1.right_stick_x);
             BackLeftDrive.setPower(-gamepad1.right_stick_x);
