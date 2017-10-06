@@ -20,7 +20,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Spud \uD83C\uDF60", group="Linear Opmode")
+@TeleOp(name="Spud", group="Linear Opmode")
 public class Spud extends LinearOpMode {
 
     // Declare OpMode members.

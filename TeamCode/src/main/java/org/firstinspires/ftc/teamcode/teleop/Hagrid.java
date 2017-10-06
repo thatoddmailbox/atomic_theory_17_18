@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="Hagrid \uD83D\uDC82\u200D♂️", group="Iterative Opmode")
+@TeleOp(name="Hagrid️", group="Iterative Opmode")
 public class Hagrid extends OpMode
 {
     // Declare OpMode members.
