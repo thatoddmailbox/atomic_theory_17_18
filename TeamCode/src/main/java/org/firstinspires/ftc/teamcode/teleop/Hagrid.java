@@ -23,6 +23,10 @@ public class Hagrid extends OpMode
 
     private Servo LeftArmServo = null;
     private Servo RightArmServo = null;
+    private Servo JewelArmServo = null;
+
+    private double SpeedMultiplier = 0.5;
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -37,6 +41,7 @@ public class Hagrid extends OpMode
 
         LeftArmServo = hardwareMap.get(Servo.class, "LeftArm");
         RightArmServo = hardwareMap.get(Servo.class, "RightArm");
+        JewelArmServo = hardwareMap.get(Servo.class, "JewelArm");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -48,6 +53,7 @@ public class Hagrid extends OpMode
 
         LeftArmServo.setDirection(Servo.Direction.FORWARD);
         RightArmServo.setDirection(Servo.Direction.REVERSE);
+        JewelArmServo.setDirection(Servo.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -74,15 +80,15 @@ public class Hagrid extends OpMode
     @Override
     public void loop() {
         if (gamepad1.right_stick_x != 0) {
-            FrontLeftDrive.setPower(gamepad1.right_stick_x);
-            BackLeftDrive.setPower(-gamepad1.right_stick_x);
-            FrontRightDrive.setPower(-gamepad1.right_stick_x);
-            BackRightDrive.setPower(gamepad1.right_stick_x);
+            FrontLeftDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
+            BackLeftDrive.setPower(-gamepad1.right_stick_x*SpeedMultiplier);
+            FrontRightDrive.setPower(-gamepad1.right_stick_x*SpeedMultiplier);
+            BackRightDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
         } else if (gamepad1.right_stick_y != 0) {
-            FrontLeftDrive.setPower(gamepad1.right_stick_x);
-            BackLeftDrive.setPower(gamepad1.right_stick_x);
-            FrontRightDrive.setPower(gamepad1.right_stick_x);
-            BackRightDrive.setPower(gamepad1.right_stick_x);
+            FrontLeftDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
+            BackLeftDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
+            FrontRightDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
+            BackRightDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
         } else {
             double leftPower;
             double rightPower;
@@ -102,35 +108,49 @@ public class Hagrid extends OpMode
             // rightPower = -gamepad1.right_stick_y ;
 
             // Send calculated power to wheels
-            FrontLeftDrive.setPower(leftPower);
-            FrontRightDrive.setPower(rightPower);
-            BackLeftDrive.setPower(leftPower);
-            BackRightDrive.setPower(rightPower);
-        }
-
-        if (gamepad1.right_trigger > 0) {
-            double LeftPosition = LeftArmServo.getPosition();
-            double RightPosition = RightArmServo.getPosition();
-            LeftArmServo.setPosition(LeftPosition + 0.05);
-            RightArmServo.setPosition(RightPosition + 0.05);
-        }
-
-        if (gamepad1.left_trigger > 0) {
-            double LeftPosition = LeftArmServo.getPosition();
-            double RightPosition = RightArmServo.getPosition();
-            LeftArmServo.setPosition(LeftPosition - 0.05);
-            RightArmServo.setPosition(RightPosition - 0.05);
+            FrontLeftDrive.setPower(leftPower*SpeedMultiplier);
+            FrontRightDrive.setPower(rightPower*SpeedMultiplier);
+            BackLeftDrive.setPower(leftPower*SpeedMultiplier);
+            BackRightDrive.setPower(rightPower*SpeedMultiplier);
         }
 
         if (gamepad1.a) {
-            LiftMotor.setPower(0.5);
+            SpeedMultiplier = 1.0;
         } else if (gamepad1.b) {
+            SpeedMultiplier = 0.5;
+        }
+
+        if (gamepad2.dpad_up) {
+            LiftMotor.setPower(0.5);
+        } else if (gamepad2.dpad_down) {
             LiftMotor.setPower(-0.5);
         } else {
             LiftMotor.setPower(0.0);
         }
 
+        if (gamepad2.a) {
+            LeftArmServo.setPosition(0.15);
+            RightArmServo.setPosition(0.15);
+        } else if (gamepad2.b) {
+            LeftArmServo.setPosition(0.4);
+            RightArmServo.setPosition(0.4);
+        }  else if (gamepad2.y) {
+            LeftArmServo.setPosition(0.5);
+            RightArmServo.setPosition(0.5);
+        } else if (gamepad2.x) {
+            LeftArmServo.setPosition(0.75);
+            RightArmServo.setPosition(0.75);
+        }
+
+        if (gamepad2.right_bumper) {
+            JewelArmServo.setPosition(1.0);
+        } else if (gamepad2.left_bumper) {
+            JewelArmServo.setPosition(0.0);
+        }
+
+        telemetry.addData("Speed", SpeedMultiplier);
         telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.update();
     }
 
     /*
