@@ -132,11 +132,11 @@ public class Hagrid extends OpMode
             LeftArmServo.setPosition(0.15);
             RightArmServo.setPosition(0.15);
         } else if (gamepad2.b) {
-            LeftArmServo.setPosition(0.4);
-            RightArmServo.setPosition(0.4);
-        }  else if (gamepad2.y) {
             LeftArmServo.setPosition(0.5);
             RightArmServo.setPosition(0.5);
+        }  else if (gamepad2.y) {
+            LeftArmServo.setPosition(0.6);
+            RightArmServo.setPosition(0.6);
         } else if (gamepad2.x) {
             LeftArmServo.setPosition(0.75);
             RightArmServo.setPosition(0.75);
