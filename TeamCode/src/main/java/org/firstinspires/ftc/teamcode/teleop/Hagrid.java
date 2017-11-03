@@ -79,17 +79,16 @@ public class Hagrid extends OpMode
      */
     @Override
     public void loop() {
-//        if (gamepad1.right_stick_x != 0) {
-//            FrontLeftDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
-//            BackLeftDrive.setPower(-gamepad1.right_stick_x*SpeedMultiplier);
-//            FrontRightDrive.setPower(-gamepad1.right_stick_x*SpeedMultiplier);
-//            BackRightDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
-//        } else if (gamepad1.right_stick_y != 0) {
-//            FrontLeftDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
-//            BackLeftDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
-//            FrontRightDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
-//            BackRightDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
-//        } else {
+        if (gamepad1.right_stick_x < -0.2 || gamepad1.right_stick_x > 0.2) {
+            telemetry.addData("Drive mode", "strafe");
+
+            FrontLeftDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
+            BackLeftDrive.setPower(-gamepad1.right_stick_x*SpeedMultiplier);
+            FrontRightDrive.setPower(-gamepad1.right_stick_x*SpeedMultiplier);
+            BackRightDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
+        } else {
+            telemetry.addData("Drive mode", "normal");
+
             double leftPower;
             double rightPower;
 
@@ -112,12 +111,6 @@ public class Hagrid extends OpMode
             FrontRightDrive.setPower(rightPower*SpeedMultiplier);
             BackLeftDrive.setPower(leftPower*SpeedMultiplier);
             BackRightDrive.setPower(rightPower*SpeedMultiplier);
-//        }
-
-        if (gamepad1.a) {
-            SpeedMultiplier = 1.0;
-        } else if (gamepad1.b) {
-            SpeedMultiplier = 0.5;
         }
 
         if (gamepad2.dpad_up) {
@@ -148,7 +141,22 @@ public class Hagrid extends OpMode
             //JewelArmServo.setPosition(0.0);
         }
 
+        if (gamepad1.right_bumper) {
+            SpeedMultiplier = 1.0;
+        } else {
+            SpeedMultiplier = 0.5;
+        }
+
+        if (gamepad2.left_trigger > 0.5) {
+            LeftArmServo.setPosition(0.6);
+        }
+        if (gamepad2.right_trigger > 0.5) {
+            RightArmServo.setPosition(0.6);
+        }
+
         telemetry.addData("Speed", SpeedMultiplier);
+        telemetry.addData("Right stick x", gamepad1.right_stick_x);
+        telemetry.addData("Right stick y", gamepad1.right_stick_y);
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
     }
