@@ -141,17 +141,20 @@ public class Hagrid extends OpMode
             //JewelArmServo.setPosition(0.0);
         }
 
-        if (gamepad1.right_bumper) {
+        if (gamepad1.right_trigger > 0.5) {
             SpeedMultiplier = 1.0;
         } else {
             SpeedMultiplier = 0.5;
         }
 
-        if (gamepad2.left_trigger > 0.5) {
-            LeftArmServo.setPosition(0.6);
-        }
         if (gamepad2.right_trigger > 0.5) {
-            RightArmServo.setPosition(0.6);
+            LeftArmServo.setPosition(0.5);
+            RightArmServo.setPosition(0.7);
+
+        }
+        if (gamepad2.left_trigger > 0.5) {
+            LeftArmServo.setPosition(0.65);
+            RightArmServo.setPosition(0.5);
         }
 
         telemetry.addData("Speed", SpeedMultiplier);
