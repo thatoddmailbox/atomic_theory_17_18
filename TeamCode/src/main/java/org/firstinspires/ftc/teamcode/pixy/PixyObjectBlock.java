@@ -7,4 +7,5 @@ public class PixyObjectBlock {
     public short yCenter;
     public short width;
     public short height;
+    public short angle;
 }

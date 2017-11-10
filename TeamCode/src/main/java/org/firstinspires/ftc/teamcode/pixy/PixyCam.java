@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.pixy;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 
@@ -12,13 +14,16 @@ import java.util.List;
 public class PixyCam extends Sensor {
     // state
     private List<PixyObjectBlock> _frame;
-    private boolean _hasReadStartOfFrame = false;
+    private boolean _skipStart = false;
+    private BlockType _blockType;
 
     // i2c stuff
-    private I2cDeviceSynch _device;
-    private I2cAddr _address;
+    public I2cDeviceSynch _device;
+    public I2cAddr _address;
 
-    private final short PIXY_SYNC_WORD = (short)0xaa55;
+    private final short PIXY_START_WORD = (short)0xaa55;
+    private final short PIXY_START_WORD_CC = (short)0xaa66;
+    private final short PIXY_START_WORDX = (short)0x55aa;
 
     public PixyCam(I2cDeviceSynch device, I2cAddr address) {
         _frame = new ArrayList<PixyObjectBlock>();
@@ -67,66 +72,91 @@ public class PixyCam extends Sensor {
     }
 
     public short readShort() {
-        short low = (short)readByte();
-        short high = (short)readByte();
-        return (short) ((high << 8) | low);
+        short low = (short)((short)readByte() & (short)0b0000000011111111);
+        short high = (short)((short)(readByte() << 8) & (short)0b1111111100000000);
+        Log.i("pixy", "0x" + Integer.toHexString(high | low) + " - " + Integer.toString(high | low));
+        return (short) (high | low);
     }
 
-    public void readToSync() {
+    public boolean getStart() {
+        short lastw = (short)0xffff;
         while (true) {
-            if (readShort() == PIXY_SYNC_WORD) {
-                return;
+            short w = readShort();
+            if (w == 0 && lastw == 0) {
+                return false;
+            } else if (w == PIXY_START_WORD && lastw == PIXY_START_WORD) {
+                _blockType = BlockType.Normal;
+                return true;
+            } else if (w == PIXY_START_WORD_CC && lastw == PIXY_START_WORD) {
+                _blockType = BlockType.ColorCode;
+                return true;
+            } else if (w == PIXY_START_WORDX) {
+                readByte();
             }
-        }
-    }
-
-    public void readToFrame() {
-        while (true) {
-            short firstShort = readShort();
-            short lastShort = readShort();
-            if (firstShort == PIXY_SYNC_WORD && lastShort == PIXY_SYNC_WORD) {
-                return;
-            }
+            lastw = w;
         }
     }
 
     // higher-level methods
-    public void fetchFrame() {
+    public boolean fetchFrame() {
         _frame.clear();
 
-        if (!_hasReadStartOfFrame) {
-            // read to the FRAME sync word
-            readToFrame();
-            readShort();
+        if (!_skipStart) {
+            if (!getStart()) {
+                return false;
+            }
+        } else {
+            _skipStart = false;
         }
 
         while (true) {
-            // the next short is either the object checksum or the OBJECT sync word (if start of frame)
-            short checksumOrSync = readShort();
-
-            if (checksumOrSync == PIXY_SYNC_WORD) {
-                // we started a new frame!
-                // return now
-                _hasReadStartOfFrame = true;
-                return;
+            // the next short is either the object checksum or a start word (if start of frame)
+            short checksum = readShort();
+            if (checksum == PIXY_START_WORD) { // we've reached the beginning of the next frame
+                _skipStart = true;
+                _blockType = BlockType.Normal;
+                return (_frame.size() > 0);
+            } else if (checksum == PIXY_START_WORD_CC) {
+                _skipStart = true;
+                _blockType = BlockType.ColorCode;
+                return (_frame.size() > 0);
+            } else if (checksum == 0) {
+                return (_frame.size() > 0);
             }
 
             PixyObjectBlock object = new PixyObjectBlock();
 
-            object.checksum = checksumOrSync;
+            object.checksum = checksum;
             object.signature = readShort();
             object.xCenter = readShort();
             object.yCenter = readShort();
             object.width = readShort();
             object.height = readShort();
+            if (_blockType == BlockType.ColorCode) {
+                object.angle = readShort();
+            } else {
+                object.angle = 0;
+            }
 
             _frame.add(object);
 
-            readShort(); // this is the next sync word (either OBJECT or FRAME)
+            short w = readShort();
+            if (w == PIXY_START_WORD) {
+                _blockType = BlockType.Normal;
+            } else if (w == PIXY_START_WORD_CC) {
+                _blockType = BlockType.ColorCode;
+            } else {
+                return (_frame.size() > 0);
+            }
         }
     }
 
     public List<PixyObjectBlock> getFrame() {
         return _frame;
     }
+}
+
+enum BlockType {
+    Normal,
+    ColorCode
 }
