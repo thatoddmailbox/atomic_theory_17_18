@@ -74,7 +74,7 @@ public class PixyCam extends Sensor {
     public short readShort() {
         short low = (short)((short)readByte() & (short)0b0000000011111111);
         short high = (short)((short)(readByte() << 8) & (short)0b1111111100000000);
-        Log.i("pixy", "0x" + Integer.toHexString(high | low) + " - " + Integer.toString(high | low));
+        //Log.i("pixy", "0x" + Integer.toHexString(high | low) + " - " + Integer.toString(high | low));
         return (short) (high | low);
     }
 

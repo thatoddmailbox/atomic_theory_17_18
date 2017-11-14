@@ -19,23 +19,27 @@ public abstract class AutonomousOperation extends LinearOpMode {
         telemetry.addLine("Ready to go!");
         telemetry.update();
 
-        robot.jewelArmLower.setPosition(1.0);
+        robot.jewelArmTwist.setPosition(0.5);
 
         waitForStart();
 
         while (opModeIsActive()) {
-            boolean redJewelOnRight = (robot.pixycamAnalog.getVoltage() > Robot.PIXYCAM_THRESHOLD);
+            Alliance rightBallColor = (robot.jewelColor.blue() > robot.jewelColor.red() ? Alliance.BLUE : Alliance.RED);
+            boolean shouldHitRight = (rightBallColor == Alliance.RED && getAlliance() == Alliance.RED) || (rightBallColor == Alliance.BLUE && getAlliance() == Alliance.BLUE);
 
-            robot.jewelArmLower.setPosition(0.0);
+            robot.jewelArmLower.setPosition(0.7);
+            sleep(3000);
 
-            if (redJewelOnRight) {
-                robot.jewelArmTwist.setPosition(0.0);
+            if (shouldHitRight) {
+                robot.jewelArmTwist.setPosition(0.7);
             } else {
-                robot.jewelArmTwist.setPosition(1.0);
+                robot.jewelArmTwist.setPosition(0.3);
             }
 
-            telemetry.addData("Red jewel on", (redJewelOnRight ? "right" : "left"));
-            telemetry.update();
+            sleep(1000);
+
+            robot.jewelArmLower.setPosition(0.4);
+            sleep(1000);
 
             idle();
 
