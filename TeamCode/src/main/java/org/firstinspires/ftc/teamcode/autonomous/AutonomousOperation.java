@@ -14,32 +14,36 @@ public abstract class AutonomousOperation extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot();
-        robot.init(hardwareMap);
+        robot.init(this);
 
         telemetry.addLine("Ready to go!");
         telemetry.update();
 
-        robot.jewelArmTwist.setPosition(0.5);
-
         waitForStart();
 
         while (opModeIsActive()) {
+            robot.jewelArmLower.setPosition(0.325);
+            sleep(1000);
+
             Alliance rightBallColor = (robot.jewelColor.blue() > robot.jewelColor.red() ? Alliance.BLUE : Alliance.RED);
             boolean shouldHitRight = (rightBallColor == Alliance.RED && getAlliance() == Alliance.RED) || (rightBallColor == Alliance.BLUE && getAlliance() == Alliance.BLUE);
+
+            if (shouldHitRight) {
+                telemetry.addData("hitting", "right");
+                telemetry.update();
+                robot.straightDrive(-0.4, 0.4);
+            } else {
+                telemetry.addData("hitting", "left");
+                telemetry.update();
+                robot.straightDrive(0.4, -0.4);
+            }
+            sleep(1000);
 
             robot.jewelArmLower.setPosition(0.7);
             sleep(3000);
 
-            if (shouldHitRight) {
-                robot.jewelArmTwist.setPosition(0.7);
-            } else {
-                robot.jewelArmTwist.setPosition(0.3);
-            }
 
-            sleep(1000);
-
-            robot.jewelArmLower.setPosition(0.4);
-            sleep(1000);
+            robot.turnToHeading(0, 0.4);
 
             idle();
 

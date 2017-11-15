@@ -10,7 +10,6 @@ public class ServoTest extends OpMode {
     Servo servo;
 
     Servo jewelArmLower;
-    Servo jewelArmTwist;
 
     boolean lastA = false;
     boolean lastB = false;
@@ -19,7 +18,6 @@ public class ServoTest extends OpMode {
     @Override
     public void init() {
         jewelArmLower = hardwareMap.servo.get("jewel arm lower");
-        jewelArmTwist = hardwareMap.servo.get("jewel arm twist");
 
         servo = jewelArmLower;
 
@@ -42,13 +40,13 @@ public class ServoTest extends OpMode {
             servo.setPosition(servo.getPosition() - 0.05);
         }
 
-        if (gamepad1.y && !lastY) {
-            if (servo == jewelArmLower) {
-                servo = jewelArmTwist;
-            } else {
-                servo = jewelArmLower;
-            }
-        }
+//        if (gamepad1.y && !lastY) {
+//            if (servo == jewelArmLower) {
+//                servo = jewelArmTwist;
+//            } else {
+//                servo = jewelArmLower;
+//            }
+//        }
 
         lastA = gamepad1.a;
         lastB = gamepad1.b;
