@@ -21,7 +21,11 @@ public class Robot {
     public DcMotor backRight;
     public DcMotor backLeft;
 
+    public DcMotor LiftMotor;
+
     public Servo jewelArmLower;
+    public Servo LeftArmServo;
+    public Servo RightArmServo;
 
     public AnalogInput pixycamAnalog;
 
@@ -42,12 +46,19 @@ public class Robot {
         frontLeft = hardwareMap.dcMotor.get("FrontLeft");
         backRight = hardwareMap.dcMotor.get("BackRight");
         backLeft = hardwareMap.dcMotor.get("BackLeft");
+        LiftMotor = hardwareMap.dcMotor.get("Lift");
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.REVERSE);
+//        LeftArmServo.setDirection(Servo.Direction.FORWARD);
+//        RightArmServo.setDirection(Servo.Direction.REVERSE);
+        LiftMotor.setDirection(DcMotor.Direction.FORWARD);
+
 
         jewelArmLower = hardwareMap.servo.get("jewel arm lower");
+        LeftArmServo = hardwareMap.get(Servo.class, "LeftArm");
+        RightArmServo = hardwareMap.get(Servo.class, "RightArm");
 
         pixycamAnalog = hardwareMap.analogInput.get("pixycam analog");
 
@@ -78,6 +89,20 @@ public class Robot {
 
         frontRight.setPower(rightPower);
         backRight.setPower(rightPower);
+    }
+
+    public void strafeLeft(double power) {
+        frontLeft.setPower(power);
+        frontRight.setPower(-power);
+        backLeft.setPower(-power);
+        backRight.setPower(power);
+    }
+
+    public void strafeRight(double power) {
+        frontLeft.setPower(-power);
+        frontRight.setPower(power);
+        backLeft.setPower(power);
+        backRight.setPower(-power);
     }
 
     public double getHeading() {
