@@ -24,7 +24,7 @@ public class Hagrid extends OpMode
 
     private Servo LeftArmServo = null;
     private Servo RightArmServo = null;
-//    private Servo JewelArmServo = null;
+    private Servo JewelArmServo = null;
 
     private double SpeedMultiplier = 0.5;
     private double StrafeSpeedMultiplier = 0.8;
@@ -45,7 +45,7 @@ public class Hagrid extends OpMode
 
         LeftArmServo = hardwareMap.get(Servo.class, "LeftArm");
         RightArmServo = hardwareMap.get(Servo.class, "RightArm");
-        //        JewelArmServo = hardwareMap.get(Servo.class, "JewelArm");
+        JewelArmServo = hardwareMap.get(Servo.class, "jewel arm lower");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -57,7 +57,9 @@ public class Hagrid extends OpMode
 
         LeftArmServo.setDirection(Servo.Direction.FORWARD);
         RightArmServo.setDirection(Servo.Direction.REVERSE);
-        //JewelArmServo.setDirection(Servo.Direction.FORWARD);
+        JewelArmServo.setDirection(Servo.Direction.FORWARD);
+
+        JewelArmServo.setPosition(0.7);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -83,10 +85,10 @@ public class Hagrid extends OpMode
      */
     @Override
     public void loop() {
-        if (gamepad1.dpad_left || gamepad1.dpad_right) {
+        if (gamepad1.left_stick_x < -0.2 || gamepad1.left_stick_x > 0.2) {
             telemetry.addData("Drive mode", "strafe");
 
-            double direction = (gamepad1.dpad_left ? -1.0 : 1.0);
+            double direction = gamepad1.left_stick_x;
 
             FrontLeftDrive.setPower(direction*StrafeSpeedMultiplier);
             BackLeftDrive.setPower(-direction*StrafeSpeedMultiplier);
@@ -102,8 +104,23 @@ public class Hagrid extends OpMode
             // Comment out the method that's not used.  The default below is POV
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
-            double drive = -gamepad1.left_stick_y;
-            double turn  =  gamepad1.left_stick_x;
+//            double drive = -gamepad1.left_stick_y;
+//            double turn  =  gamepad1.left_stick_x;
+
+            double drive = 0;
+            if (gamepad1.y) {
+                drive = 1;
+            } else if (gamepad1.a) {
+                drive = -1;
+            }
+
+            double turn = 0;
+            if (gamepad1.b) {
+                turn = 1;
+            } else if (gamepad1.x) {
+                turn = -1;
+            }
+
             leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
             rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
@@ -147,8 +164,10 @@ public class Hagrid extends OpMode
             //JewelArmServo.setPosition(0.0);
         }
 
-        if (gamepad1.b && !lastB) {
-            SpeedMultiplier = (SpeedMultiplier == 1.0 ? 0.5 : 1.0);
+        if (gamepad1.dpad_up) {
+            SpeedMultiplier = 1.0;
+        } else if (gamepad1.dpad_down) {
+            SpeedMultiplier = 0.5;
         }
 
         if (gamepad2.right_trigger > 0.5) {
@@ -162,8 +181,6 @@ public class Hagrid extends OpMode
         }
 
         telemetry.addData("Speed", SpeedMultiplier);
-        telemetry.addData("Right stick x", gamepad1.right_stick_x);
-        telemetry.addData("Right stick y", gamepad1.right_stick_y);
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
 
