@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.misc.Alliance;
@@ -23,22 +22,22 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
         while (opModeIsActive()) {
             robot.jewelArmLower.setPosition(0.3);
-            robot.LiftMotor.setPower(0.5);
+            robot.liftMotor.setPower(0.5);
             sleep(400);
-            robot.LiftMotor.setPower(0);
-            robot.LeftArmServo.setPosition(0.6);
-            robot.RightArmServo.setPosition(0.4);
+            robot.liftMotor.setPower(0);
+            robot.leftArmServo.setPosition(0.6);
+            robot.rightArmServo.setPosition(0.4);
             sleep(700);
-            robot.LiftMotor.setPower(-0.5);
+            robot.liftMotor.setPower(-0.5);
             sleep(250);
-            robot.LiftMotor.setPower(0);
+            robot.liftMotor.setPower(0);
             sleep(500);
-            robot.LeftArmServo.setPosition(0.75);
-            robot.RightArmServo.setPosition(0.35);
+            robot.leftArmServo.setPosition(0.75);
+            robot.rightArmServo.setPosition(0.35);
             sleep(700);
-            robot.LiftMotor.setPower(0.5);
+            robot.liftMotor.setPower(0.5);
             sleep(700);
-            robot.LiftMotor.setPower(0);
+            robot.liftMotor.setPower(0);
 
 
             Alliance rightBallColor = (robot.jewelColor.blue() > robot.jewelColor.red() ? Alliance.BLUE : Alliance.RED);
@@ -83,8 +82,8 @@ public abstract class AutonomousOperation extends LinearOpMode {
             sleep(350);
             robot.straightDrive(0,0);
             sleep(200);
-            robot.LeftArmServo.setPosition(0.6);
-            robot.RightArmServo.setPosition(0.4);
+            robot.leftArmServo.setPosition(0.6);
+            robot.rightArmServo.setPosition(0.4);
             sleep(700);
             robot.straightDrive(-0.4, -0.4);
             sleep(100);

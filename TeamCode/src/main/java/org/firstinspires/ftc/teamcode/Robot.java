@@ -3,12 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -21,11 +19,11 @@ public class Robot {
     public DcMotor backRight;
     public DcMotor backLeft;
 
-    public DcMotor LiftMotor;
+    public DcMotor liftMotor;
 
     public Servo jewelArmLower;
-    public Servo LeftArmServo;
-    public Servo RightArmServo;
+    public Servo leftArmServo;
+    public Servo rightArmServo;
 
     public AnalogInput pixycamAnalog;
 
@@ -46,19 +44,20 @@ public class Robot {
         frontLeft = hardwareMap.dcMotor.get("FrontLeft");
         backRight = hardwareMap.dcMotor.get("BackRight");
         backLeft = hardwareMap.dcMotor.get("BackLeft");
-        LiftMotor = hardwareMap.dcMotor.get("Lift");
+        liftMotor = hardwareMap.dcMotor.get("Lift");
+
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.REVERSE);
-//        LeftArmServo.setDirection(Servo.Direction.FORWARD);
-//        RightArmServo.setDirection(Servo.Direction.REVERSE);
-        LiftMotor.setDirection(DcMotor.Direction.FORWARD);
-
+        liftMotor.setDirection(DcMotor.Direction.FORWARD);
 
         jewelArmLower = hardwareMap.servo.get("jewel arm lower");
-        LeftArmServo = hardwareMap.get(Servo.class, "LeftArm");
-        RightArmServo = hardwareMap.get(Servo.class, "RightArm");
+        leftArmServo = hardwareMap.servo.get("LeftArm");
+        rightArmServo = hardwareMap.servo.get("RightArm");
+
+        leftArmServo.setDirection(Servo.Direction.FORWARD);
+        rightArmServo.setDirection(Servo.Direction.REVERSE);
 
         pixycamAnalog = hardwareMap.analogInput.get("pixycam analog");
 
