@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -26,6 +27,9 @@ public class Hagrid extends OpMode
 //    private Servo JewelArmServo = null;
 
     private double SpeedMultiplier = 0.5;
+    private double StrafeSpeedMultiplier = 0.8;
+
+    private boolean lastB;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -79,13 +83,15 @@ public class Hagrid extends OpMode
      */
     @Override
     public void loop() {
-        if (gamepad1.right_stick_x < -0.2 || gamepad1.right_stick_x > 0.2) {
+        if (gamepad1.dpad_left || gamepad1.dpad_right) {
             telemetry.addData("Drive mode", "strafe");
 
-            FrontLeftDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
-            BackLeftDrive.setPower(-gamepad1.right_stick_x*SpeedMultiplier);
-            FrontRightDrive.setPower(-gamepad1.right_stick_x*SpeedMultiplier);
-            BackRightDrive.setPower(gamepad1.right_stick_x*SpeedMultiplier);
+            double direction = (gamepad1.dpad_left ? -1.0 : 1.0);
+
+            FrontLeftDrive.setPower(direction*StrafeSpeedMultiplier);
+            BackLeftDrive.setPower(-direction*StrafeSpeedMultiplier);
+            FrontRightDrive.setPower(-direction*StrafeSpeedMultiplier);
+            BackRightDrive.setPower(direction*StrafeSpeedMultiplier);
         } else {
             telemetry.addData("Drive mode", "normal");
 
@@ -141,10 +147,8 @@ public class Hagrid extends OpMode
             //JewelArmServo.setPosition(0.0);
         }
 
-        if (gamepad1.right_trigger > 0.5) {
-            SpeedMultiplier = 1.0;
-        } else {
-            SpeedMultiplier = 0.5;
+        if (gamepad1.b && !lastB) {
+            SpeedMultiplier = (SpeedMultiplier == 1.0 ? 0.5 : 1.0);
         }
 
         if (gamepad2.right_trigger > 0.5) {
@@ -162,6 +166,8 @@ public class Hagrid extends OpMode
         telemetry.addData("Right stick y", gamepad1.right_stick_y);
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
+
+        lastB = gamepad1.b;
     }
 
     /*
