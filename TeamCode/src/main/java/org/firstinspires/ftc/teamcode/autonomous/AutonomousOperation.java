@@ -4,9 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.misc.Alliance;
+import org.firstinspires.ftc.teamcode.misc.BalancingStonePosition;
 
 public abstract class AutonomousOperation extends LinearOpMode {
     public abstract Alliance getAlliance();
+    public abstract BalancingStonePosition getBalancingStonePosition();
 
     Robot robot;
 
