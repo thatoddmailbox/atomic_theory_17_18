@@ -87,10 +87,10 @@ public class Hagrid extends OpMode
     public void loop() {
         JewelArmServo.setPosition(Robot.JEWEL_ARM_UP);
 
-        if (gamepad1.left_stick_x < -0.2 || gamepad1.left_stick_x > 0.2) {
+        if (gamepad1.right_stick_x < -0.2 || gamepad1.right_stick_x > 0.2) {
             telemetry.addData("Drive mode", "strafe");
 
-            double direction = gamepad1.left_stick_x;
+            double direction = gamepad1.right_stick_x;
 
             FrontLeftDrive.setPower(direction*StrafeSpeedMultiplier);
             BackLeftDrive.setPower(-direction*StrafeSpeedMultiplier);
