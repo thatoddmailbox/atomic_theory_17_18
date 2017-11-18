@@ -14,6 +14,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Robot {
     public static final double PIXYCAM_THRESHOLD = (3.3/2);
 
+    public static final double JEWEL_ARM_UP = 0.7;
+    public static final double JEWEL_ARM_DOWN = 0.3;
+
     public DcMotor frontRight;
     public DcMotor frontLeft;
     public DcMotor backRight;
@@ -82,12 +85,23 @@ public class Robot {
         opMode.idle();
     }
 
-    public void straightDrive(double leftPower, double rightPower) {
-        frontLeft.setPower(leftPower);
-        backLeft.setPower(leftPower);
+    public boolean opModeIsActive() {
+        return opMode.opModeIsActive();
+    }
 
-        frontRight.setPower(rightPower);
-        backRight.setPower(rightPower);
+    public void leftMotors(double power) {
+        frontLeft.setPower(power);
+        backLeft.setPower(power);
+    }
+
+    public void rightMotors(double power) {
+        frontRight.setPower(power);
+        backRight.setPower(power);
+    }
+
+    public void straightDrive(double leftPower, double rightPower) {
+        leftMotors(leftPower);
+        rightMotors(rightPower);
     }
 
     public void strafeLeft(double power) {
@@ -109,21 +123,42 @@ public class Robot {
     }
 
     public void turnToHeading(int targetHeading, double power) {
-        double currentHeading = Math.round(getHeading());
-        while (currentHeading != targetHeading) {
-            currentHeading = Math.round(getHeading());
+        double currentHeading = getHeading();
+        boolean turnLeft = (targetHeading - currentHeading > 0 ? true : false);
+        while (opModeIsActive()) {
+            telemetry.addData("hdg", currentHeading);
+            telemetry.update();
 
-            if (targetHeading > currentHeading) {
-                straightDrive(power * -1, power * 1);
-            } else {
-                straightDrive(power * 1, power * -1);
+            double currentSpeed = power;
+            double distanceTo = Math.abs(targetHeading - currentHeading);
+            double minimumSpeed = 0.2f;
+            double minimumLeftSpeed = (turnLeft ? -minimumSpeed : minimumSpeed);
+            double minimumRightSpeed = (turnLeft ? minimumSpeed : -minimumSpeed);
+
+            if (distanceTo < 10) {
+                currentSpeed *= 0.20;
+                currentSpeed = Math.min(currentSpeed, 0.7f);
+            } else if (distanceTo < 20) {
+                currentSpeed *= 0.30;
+                currentSpeed = Math.min(currentSpeed, 0.75f);
+            } else if (distanceTo < 30) {
+                currentSpeed *= 0.40;
+                currentSpeed = Math.min(currentSpeed, 0.8f);
             }
 
-            telemetry.addData("heading", currentHeading);
-            telemetry.update();
+            leftMotors(Math.max(minimumLeftSpeed, (turnLeft ? -currentSpeed : currentSpeed)));
+            rightMotors(Math.max(minimumRightSpeed, (turnLeft ? currentSpeed : -currentSpeed)));
+
+            currentHeading = getHeading();
+
+            turnLeft = (targetHeading - currentHeading > 0 ? true : false);
+            if (targetHeading == currentHeading) {
+                break;
+            }
 
             idle();
         }
-        straightDrive(0, 0);
+        leftMotors(0.0);
+        rightMotors(0.0);
     }
 }

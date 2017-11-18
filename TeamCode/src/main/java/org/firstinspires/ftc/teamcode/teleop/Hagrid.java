@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.Robot;
+
 @TeleOp(name="Hagrid️", group="Iterative Opmode")
 public class Hagrid extends OpMode
 {
@@ -59,8 +61,6 @@ public class Hagrid extends OpMode
         RightArmServo.setDirection(Servo.Direction.REVERSE);
         JewelArmServo.setDirection(Servo.Direction.FORWARD);
 
-        JewelArmServo.setPosition(0.7);
-
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
@@ -85,6 +85,8 @@ public class Hagrid extends OpMode
      */
     @Override
     public void loop() {
+        JewelArmServo.setPosition(Robot.JEWEL_ARM_UP);
+
         if (gamepad1.left_stick_x < -0.2 || gamepad1.left_stick_x > 0.2) {
             telemetry.addData("Drive mode", "strafe");
 
@@ -108,16 +110,16 @@ public class Hagrid extends OpMode
 //            double turn  =  gamepad1.left_stick_x;
 
             double drive = 0;
-            if (gamepad1.y) {
+            if (gamepad1.dpad_up) {
                 drive = 1;
-            } else if (gamepad1.a) {
+            } else if (gamepad1.dpad_down) {
                 drive = -1;
             }
 
             double turn = 0;
-            if (gamepad1.b) {
+            if (gamepad1.dpad_right) {
                 turn = 1;
-            } else if (gamepad1.x) {
+            } else if (gamepad1.dpad_left) {
                 turn = -1;
             }
 
@@ -164,9 +166,9 @@ public class Hagrid extends OpMode
             //JewelArmServo.setPosition(0.0);
         }
 
-        if (gamepad1.dpad_up) {
+        if (gamepad1.y) {
             SpeedMultiplier = 1.0;
-        } else if (gamepad1.dpad_down) {
+        } else if (gamepad1.a) {
             SpeedMultiplier = 0.5;
         }
 

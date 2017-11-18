@@ -23,74 +23,56 @@ public abstract class AutonomousOperation extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            robot.jewelArmLower.setPosition(0.3);
-            robot.liftMotor.setPower(0.5);
-            sleep(400);
-            robot.liftMotor.setPower(0);
-            robot.leftArmServo.setPosition(0.6);
-            robot.rightArmServo.setPosition(0.4);
+            robot.jewelArmLower.setPosition(Robot.JEWEL_ARM_DOWN);
             sleep(700);
-            robot.liftMotor.setPower(-0.5);
-            sleep(250);
-            robot.liftMotor.setPower(0);
-            sleep(500);
-            robot.leftArmServo.setPosition(0.75);
-            robot.rightArmServo.setPosition(0.35);
-            sleep(700);
-            robot.liftMotor.setPower(0.5);
-            sleep(700);
-            robot.liftMotor.setPower(0);
 
+            telemetry.addData("r", robot.jewelColor.red());
+            telemetry.addData("g", robot.jewelColor.green());
+            telemetry.addData("b", robot.jewelColor.blue());
 
-            Alliance rightBallColor = (robot.jewelColor.blue() > robot.jewelColor.red() ? Alliance.BLUE : Alliance.RED);
-            boolean shouldHitRight = (rightBallColor == Alliance.RED && getAlliance() == Alliance.RED) || (rightBallColor == Alliance.BLUE && getAlliance() == Alliance.BLUE);
-
-            if (shouldHitRight) {
-                telemetry.addData("hitting", "right");
+            if (robot.jewelColor.red() == robot.jewelColor.blue()) {
+                telemetry.addData("hitting", "neither");
                 telemetry.update();
-                robot.straightDrive(-0.4, 0.4);
-                sleep(300);
-                robot.straightDrive(0,0);
-                sleep(300);
-                robot.jewelArmLower.setPosition(0.7);
-                robot.straightDrive(0.3, -0.3);
             } else {
-                telemetry.addData("hitting", "left");
-                telemetry.update();
-                robot.straightDrive(0.4, -0.4);
-                sleep(300);
-                robot.straightDrive(0,0);
-                sleep(300);
-                robot.jewelArmLower.setPosition(0.7);
-                robot.straightDrive(-0.3, 0.3);
+                Alliance seenBallColor = (robot.jewelColor.blue() > robot.jewelColor.red() ? Alliance.BLUE : Alliance.RED);
 
+                // if we're on red, we're looking at the right side
+                // if we're on blue, we're looking at the left side
+
+                boolean shouldHitRight = (seenBallColor == Alliance.RED && getAlliance() == Alliance.RED) || (seenBallColor == Alliance.BLUE && getAlliance() == Alliance.BLUE);
+
+                if (shouldHitRight) {
+                    telemetry.addData("hitting", "right");
+                    telemetry.update();
+
+                    sleep(300);
+
+                    robot.leftMotors(0.4);
+                    robot.rightMotors(-0.4);
+                    sleep(300);
+                } else {
+                    telemetry.addData("hitting", "left");
+                    telemetry.update();
+
+                    sleep(300);
+
+                    robot.leftMotors(-0.4);
+                    robot.rightMotors(0.4);
+                    sleep(300);
+                }
             }
-            sleep(300);
-            idle();
 
-
-
-            robot.strafeLeft(0.7);
-            sleep(2400);
-            robot.straightDrive(1, 1);
-            sleep(75);
-            robot.straightDrive(0,0);
-            sleep(200);
-            robot.straightDrive(-1, 1);
-            sleep(1000);
-            robot.straightDrive(0,0);
-            sleep(200);
-            robot.straightDrive(0.8, 0.8);
-            sleep(350);
-            robot.straightDrive(0,0);
-            sleep(200);
-            robot.leftArmServo.setPosition(0.6);
-            robot.rightArmServo.setPosition(0.4);
+            robot.jewelArmLower.setPosition(Robot.JEWEL_ARM_UP);
             sleep(700);
-            robot.straightDrive(-0.4, -0.4);
-            sleep(100);
-            robot.straightDrive(0,0);
-            sleep(200);
+
+            if (getAlliance() == Alliance.RED) {
+                robot.strafeLeft(0.7);
+                sleep(500);
+            } else {
+                robot.strafeRight(0.7);
+                sleep(500);
+            }
+
             idle();
             break;
         }
