@@ -15,7 +15,8 @@ public class Robot {
     public static final double PIXYCAM_THRESHOLD = (3.3/2);
 
     public static final double JEWEL_ARM_UP = 0.7;
-    public static final double JEWEL_ARM_DOWN = 0.3;
+    public static final double JEWEL_ARM_DOWN = 0.35;
+    public static final double JEWEL_ARM_DOWN_MAX = 0.275;
 
     public DcMotor frontRight;
     public DcMotor frontLeft;

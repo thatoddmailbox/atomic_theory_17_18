@@ -23,8 +23,16 @@ public abstract class AutonomousOperation extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            robot.jewelArmLower.setPosition(Robot.JEWEL_ARM_DOWN);
-            sleep(700);
+            double armPosition = Robot.JEWEL_ARM_DOWN;
+            robot.jewelArmLower.setPosition(armPosition);
+            sleep(1250);
+
+            while (robot.jewelColor.red() == robot.jewelColor.blue() && armPosition > Robot.JEWEL_ARM_DOWN_MAX) {
+                // try lowering the arm more
+                armPosition -= 0.05;
+                robot.jewelArmLower.setPosition(armPosition);
+                sleep(200);
+            }
 
             telemetry.addData("r", robot.jewelColor.red());
             telemetry.addData("g", robot.jewelColor.green());
@@ -49,7 +57,7 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
                     robot.leftMotors(0.4);
                     robot.rightMotors(-0.4);
-                    sleep(300);
+                    sleep(200);
                 } else {
                     telemetry.addData("hitting", "left");
                     telemetry.update();
@@ -58,20 +66,20 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
                     robot.leftMotors(-0.4);
                     robot.rightMotors(0.4);
-                    sleep(300);
+                    sleep(200);
                 }
             }
 
             robot.jewelArmLower.setPosition(Robot.JEWEL_ARM_UP);
             sleep(700);
 
-            if (getAlliance() == Alliance.RED) {
-                robot.strafeLeft(0.7);
-                sleep(500);
-            } else {
-                robot.strafeRight(0.7);
-                sleep(500);
-            }
+//            if (getAlliance() == Alliance.RED) {
+//                robot.strafeLeft(0.7);
+//                sleep(500);
+//            } else {
+//                robot.strafeRight(0.7);
+//                sleep(500);
+//            }
 
             idle();
             break;
