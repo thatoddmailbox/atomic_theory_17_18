@@ -12,10 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PixyCam extends Sensor {
+    public final int CHUNK_SIZE = 100;
+
     // state
     private List<PixyObjectBlock> _frame;
     private boolean _skipStart = false;
     private BlockType _blockType;
+    private byte[] _currentData;
+    public int _currentDataIndex = 0;
 
     // i2c stuff
     public I2cDeviceSynch _device;
@@ -68,7 +72,17 @@ public class PixyCam extends Sensor {
 
     // interface methods
     public byte readByte() {
-        return _device.read(0, 1)[0];
+        if (_currentData == null || _currentData.length == 0 || _currentDataIndex > (_currentData.length - 1)) {
+            // need to read more data
+            _currentData = readChunk();
+            _currentDataIndex = 0;
+        }
+        _currentDataIndex++;
+        return _currentData[_currentDataIndex - 1];
+    }
+
+    public byte[] readChunk() {
+        return _device.read(0, CHUNK_SIZE);
     }
 
     public short readShort() {
