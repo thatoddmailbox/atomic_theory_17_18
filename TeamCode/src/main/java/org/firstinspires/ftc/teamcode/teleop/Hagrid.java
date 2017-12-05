@@ -31,8 +31,6 @@ public class Hagrid extends OpMode
     private double SpeedMultiplier = 0.5;
     private double StrafeSpeedMultiplier = 0.8;
 
-    private boolean lastB;
-
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -185,8 +183,6 @@ public class Hagrid extends OpMode
         telemetry.addData("Speed", SpeedMultiplier);
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
-
-        lastB = gamepad1.b;
     }
 
     /*

@@ -39,7 +39,7 @@ public class PixyCam extends Sensor {
             _device.setI2cAddress(address);
         }
 
-        _device.setReadWindow(new I2cDeviceSynch.ReadWindow(0, 1, I2cDeviceSynch.ReadMode.ONLY_ONCE));
+//        _device.setReadWindow(new I2cDeviceSynch.ReadWindow(0, 1, I2cDeviceSynch.ReadMode.ONLY_ONCE));
 
         _device.engage();
     }
