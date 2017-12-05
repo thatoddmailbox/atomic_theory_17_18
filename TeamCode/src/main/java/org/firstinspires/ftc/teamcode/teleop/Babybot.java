@@ -145,9 +145,9 @@ public class Babybot extends OpMode
         }
 
         if (gamepad2.dpad_up) {
-            LiftMotor.setPower(0.5);
-        } else if (gamepad2.dpad_down) {
             LiftMotor.setPower(-0.5);
+        } else if (gamepad2.dpad_down) {
+            LiftMotor.setPower(0.5);
         } else {
             LiftMotor.setPower(0.0);
         }
