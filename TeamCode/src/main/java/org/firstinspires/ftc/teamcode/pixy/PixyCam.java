@@ -168,8 +168,3 @@ public class PixyCam extends Sensor {
         return _frame;
     }
 }
-
-enum BlockType {
-    Normal,
-    ColorCode
-}
