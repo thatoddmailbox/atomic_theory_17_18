@@ -12,11 +12,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Robot {
-    public static final double PIXYCAM_THRESHOLD = (3.3/2);
+    public static final double JEWEL_ARM_UP = 0.75;
+    public static final double JEWEL_ARM_DOWN = 0.225;
+    public static final double JEWEL_ARM_DOWN_MAX = 0.175;
 
-    public static final double JEWEL_ARM_UP = 0.7;
-    public static final double JEWEL_ARM_DOWN = 0.35;
-    public static final double JEWEL_ARM_DOWN_MAX = 0.275;
+    public static final double GLYPH_ARM_LEFT_CLOSE = 0.2;
+    public static final double GLYPH_ARM_RIGHT_CLOSE = 0.3;
+    public static final double GLYPH_ARM_LEFT_OPEN = 0.4;
+    public static final double GLYPH_ARM_RIGHT_OPEN = 0.5;
 
     public DcMotor frontRight;
     public DcMotor frontLeft;
@@ -28,8 +31,6 @@ public class Robot {
     public Servo jewelArmLower;
     public Servo leftArmServo;
     public Servo rightArmServo;
-
-    public AnalogInput pixycamAnalog;
 
     public BNO055IMU imu;
 
@@ -62,8 +63,6 @@ public class Robot {
 
         leftArmServo.setDirection(Servo.Direction.FORWARD);
         rightArmServo.setDirection(Servo.Direction.REVERSE);
-
-        pixycamAnalog = hardwareMap.analogInput.get("pixycam analog");
 
         jewelColor = hardwareMap.colorSensor.get("jewel color");
 
@@ -117,6 +116,15 @@ public class Robot {
         frontRight.setPower(power);
         backLeft.setPower(power);
         backRight.setPower(-power);
+    }
+
+    public void glyphArms(double left, double right) {
+        leftArmServo.setPosition(left);
+        rightArmServo.setPosition(right);
+    }
+
+    public void lift(double power) {
+        liftMotor.setPower(power);
     }
 
     public double getHeading() {

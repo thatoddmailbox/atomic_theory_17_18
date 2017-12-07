@@ -23,6 +23,14 @@ public abstract class AutonomousOperation extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            // grab the block
+            robot.glyphArms(Robot.GLYPH_ARM_LEFT_CLOSE, Robot.GLYPH_ARM_RIGHT_CLOSE);
+            sleep(200);
+            robot.lift(-0.5);
+            sleep(400);
+            robot.lift(0.0);
+
+            // lower the arm
             double armPosition = Robot.JEWEL_ARM_DOWN;
             robot.jewelArmLower.setPosition(armPosition);
             sleep(1250);
@@ -41,6 +49,9 @@ public abstract class AutonomousOperation extends LinearOpMode {
             if (robot.jewelColor.red() == robot.jewelColor.blue()) {
                 telemetry.addData("hitting", "neither");
                 telemetry.update();
+
+                robot.jewelArmLower.setPosition(Robot.JEWEL_ARM_UP);
+                sleep(700);
             } else {
                 Alliance seenBallColor = (robot.jewelColor.blue() > robot.jewelColor.red() ? Alliance.BLUE : Alliance.RED);
 
@@ -55,31 +66,66 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
                     sleep(300);
 
-                    robot.leftMotors(0.4);
-                    robot.rightMotors(-0.4);
-                    sleep(200);
+                    robot.leftMotors(-0.3);
+                    robot.rightMotors(0.3);
+                    sleep(100);
+
+                    robot.leftMotors(0);
+                    robot.rightMotors(0);
+
+                    robot.jewelArmLower.setPosition(Robot.JEWEL_ARM_UP);
+                    sleep(700);
+
+                    robot.leftMotors(0.3);
+                    robot.rightMotors(-0.3);
+                    sleep(100);
                 } else {
                     telemetry.addData("hitting", "left");
                     telemetry.update();
 
                     sleep(300);
 
-                    robot.leftMotors(-0.4);
-                    robot.rightMotors(0.4);
-                    sleep(200);
+                    robot.leftMotors(0.3);
+                    robot.rightMotors(-0.3);
+                    sleep(100);
+
+                    robot.leftMotors(0);
+                    robot.rightMotors(0);
+
+                    robot.jewelArmLower.setPosition(Robot.JEWEL_ARM_UP);
+                    sleep(700);
+
+                    robot.leftMotors(-0.3);
+                    robot.rightMotors(0.3);
+                    sleep(100);
                 }
+
+                robot.leftMotors(0);
+                robot.rightMotors(0);
             }
 
-            robot.jewelArmLower.setPosition(Robot.JEWEL_ARM_UP);
-            sleep(700);
+            if (getBalancingStonePosition() == BalancingStonePosition.CLOSE) {
+//                robot.straightDrive(-0.4, -0.4);
+//                sleep(600);
+//                robot.straightDrive(0.0, 0.0);
 
-//            if (getAlliance() == Alliance.RED) {
-//                robot.strafeLeft(0.7);
-//                sleep(500);
-//            } else {
-//                robot.strafeRight(0.7);
-//                sleep(500);
-//            }
+                if (getAlliance() == Alliance.RED) {
+                    robot.leftMotors(0.4);
+                    robot.rightMotors(-0.4);
+                    sleep(800);
+                    robot.leftMotors(0);
+                    robot.rightMotors(0);
+                } else {
+                    robot.leftMotors(-0.4);
+                    robot.rightMotors(0.4);
+                    sleep(800);
+                    robot.leftMotors(0);
+                    robot.rightMotors(0);
+                }
+                sleep(2000);
+                robot.leftMotors(0.0);
+                robot.rightMotors(0.0);
+            }
 
             idle();
             break;
