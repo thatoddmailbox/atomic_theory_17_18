@@ -93,15 +93,15 @@ public class Babybot extends OpMode
     public void loop() {
         JewelArmServo.setPosition(Robot.JEWEL_ARM_UP);
 
-        if (gamepad1.left_stick_x < -0.2 || gamepad1.left_stick_x > 0.2) {
+        if (gamepad1.right_stick_x < -0.2 || gamepad1.right_stick_x > 0.2) {
             telemetry.addData("Drive mode", "strafe");
 
-            double direction = gamepad1.left_stick_x;
+            double direction = gamepad1.right_stick_x;
 
             FrontLeftDrive.setPower(direction*StrafeSpeedMultiplier);
             BackLeftDrive.setPower(-direction*StrafeSpeedMultiplier);
-            FrontRightDrive.setPower(direction*StrafeSpeedMultiplier);
-            BackRightDrive.setPower(-direction*StrafeSpeedMultiplier);
+            FrontRightDrive.setPower(-direction*StrafeSpeedMultiplier);
+            BackRightDrive.setPower(direction*StrafeSpeedMultiplier);
         } else {
             telemetry.addData("Drive mode", "normal");
 
@@ -155,15 +155,15 @@ public class Babybot extends OpMode
         if (gamepad2.a) { //close
             LeftArmServo.setPosition(0.2);
             RightArmServo.setPosition(0.3);
-        } else if (gamepad2.b) { //right open
-            LeftArmServo.setPosition(0.4);
-            RightArmServo.setPosition(0.4);
+        } else if (gamepad2.b) { // all the way open
+            LeftArmServo.setPosition(0.5);
+            RightArmServo.setPosition(0.625);
         }  else if (gamepad2.y) { // both open
-            LeftArmServo.setPosition(0.4);
-            RightArmServo.setPosition(0.5);
+            LeftArmServo.setPosition(0.3);
+            RightArmServo.setPosition(0.425);
         } else if (gamepad2.x) { // left open
-            LeftArmServo.setPosition(0.4);
-            RightArmServo.setPosition(0.5);
+            LeftArmServo.setPosition(0.2);
+            RightArmServo.setPosition(0.425);
         }
 
         if (gamepad2.right_bumper) {
@@ -173,7 +173,7 @@ public class Babybot extends OpMode
         }
 
         if (gamepad1.y) {
-            SpeedMultiplier = 1.0;
+            SpeedMultiplier = 0.8;
         } else if (gamepad1.a) {
             SpeedMultiplier = 0.5;
         }
