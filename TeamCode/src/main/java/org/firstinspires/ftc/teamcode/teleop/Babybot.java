@@ -167,9 +167,15 @@ public class Babybot extends OpMode
         }
 
         if (gamepad2.right_bumper) {
-            //JewelArmServo.setPosition(1.0);
+            double position = JewelArmServo.getPosition();
+            position += 0.1;
+            position = Math.max(position, 1.0);
+            JewelArmServo.setPosition(position);
         } else if (gamepad2.left_bumper) {
-            //JewelArmServo.setPosition(0.0);
+            double position = JewelArmServo.getPosition();
+            position -= 0.1;
+            position = Math.min(position, 0.0);
+            JewelArmServo.setPosition(position);
         }
 
         if (gamepad1.y) {

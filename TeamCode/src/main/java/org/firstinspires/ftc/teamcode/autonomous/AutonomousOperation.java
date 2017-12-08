@@ -109,6 +109,9 @@ public abstract class AutonomousOperation extends LinearOpMode {
 //                sleep(600);
 //                robot.straightDrive(0.0, 0.0);
 
+                robot.lift(-0.5);
+                sleep(200);
+
                 if (getAlliance() == Alliance.RED) {
                     robot.leftMotors(-0.4);
                     robot.rightMotors(0.4);
@@ -122,14 +125,39 @@ public abstract class AutonomousOperation extends LinearOpMode {
                     robot.leftMotors(0);
                     robot.rightMotors(0);
                 }
-                sleep(2000);
+                robot.lift(-0.4);
                 robot.leftMotors(0.0);
                 robot.rightMotors(0.0);
 
-                robot.straightDrive(0.4, 0.4);
-                sleep(1000);
+                sleep(200);
+                robot.lift(0.0);
+
+                ///
+                sleep(200);
+                ///
+
+                robot.straightDrive(-0.4, -0.4);
+                sleep(675);
                 robot.straightDrive(0, 0);
 
+                ///
+                sleep(200);
+                ///
+
+                if (getAlliance() == Alliance.RED) {
+                    robot.leftMotors(-0.4);
+                    robot.rightMotors(0.4);
+                    sleep(1200);
+                    robot.leftMotors(0);
+                    robot.rightMotors(0);
+                } else {
+                    robot.leftMotors(0.4);
+                    robot.rightMotors(-0.4);
+                    sleep(1200);
+                    robot.leftMotors(0);
+                    robot.rightMotors(0);
+                }
+            } else {
                 if (getAlliance() == Alliance.RED) {
                     robot.leftMotors(-0.4);
                     robot.rightMotors(0.4);
@@ -144,16 +172,31 @@ public abstract class AutonomousOperation extends LinearOpMode {
                     robot.rightMotors(0);
                 }
 
-                robot.straightDrive(0.5, 0.5);
-                sleep(400);
-                robot.glyphArms(Robot.GLYPH_ARM_LEFT_OPEN, Robot.GLYPH_ARM_RIGHT_OPEN);
-                robot.straightDrive(-0.5, -0.5);
-                sleep(400);
-                robot.glyphArms(Robot.GLYPH_ARM_LEFT_CLOSE, Robot.GLYPH_ARM_RIGHT_CLOSE);
-                robot.straightDrive(0.5, 0.5);
-                sleep(400);
+                ///
+                sleep(200);
+                ///
+
+                robot.straightDrive(-0.3, -0.3);
+                sleep(1400);
                 robot.straightDrive(0, 0);
             }
+
+            ///
+            sleep(200);
+            ///
+
+            robot.straightDrive(-0.3, -0.3);
+            sleep(1000);
+            robot.glyphArms(Robot.GLYPH_ARM_LEFT_OPEN, Robot.GLYPH_ARM_RIGHT_OPEN);
+            robot.straightDrive(0.3, 0.3);
+            sleep(500);
+            robot.straightDrive(-0.3, -0.3);
+            sleep(1000);
+            robot.straightDrive(0, 0);
+
+            robot.straightDrive(0.3, 0.3);
+            sleep(200);
+            robot.straightDrive(0, 0);
 
             idle();
             break;
