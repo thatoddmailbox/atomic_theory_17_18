@@ -159,8 +159,8 @@ public class Babybot extends OpMode
             LeftArmServo.setPosition(0.5);
             RightArmServo.setPosition(0.625);
         }  else if (gamepad2.y) { // both open
-            LeftArmServo.setPosition(0.3);
-            RightArmServo.setPosition(0.425);
+            LeftArmServo.setPosition(0.35);
+            RightArmServo.setPosition(0.475);
         } else if (gamepad2.x) { // left open
             LeftArmServo.setPosition(0.2);
             RightArmServo.setPosition(0.425);
