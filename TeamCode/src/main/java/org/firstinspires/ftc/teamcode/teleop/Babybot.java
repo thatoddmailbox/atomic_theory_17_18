@@ -28,7 +28,7 @@ public class Babybot extends OpMode
     private Servo RightArmServo = null;
     private Servo JewelArmServo = null;
 
-    private double SpeedMultiplier = 0.5;
+    private double SpeedMultiplier = 0.4;
     private double StrafeSpeedMultiplier = 0.6;
 
     private boolean lastB;
@@ -181,7 +181,7 @@ public class Babybot extends OpMode
         if (gamepad1.y) {
             SpeedMultiplier = 0.8;
         } else if (gamepad1.a) {
-            SpeedMultiplier = 0.5;
+            SpeedMultiplier = 0.4;
         }
 
         if (gamepad1.right_trigger > 0.5) {
