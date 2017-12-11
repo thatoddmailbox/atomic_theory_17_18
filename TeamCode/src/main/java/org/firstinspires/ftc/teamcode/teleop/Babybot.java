@@ -60,6 +60,7 @@ public class Babybot extends OpMode
         LeftArmServo.setDirection(Servo.Direction.FORWARD);
         RightArmServo.setDirection(Servo.Direction.REVERSE);
         JewelArmServo.setDirection(Servo.Direction.FORWARD);
+        JewelArmServo.setPosition(Robot.JEWEL_ARM_UP);
 
         FrontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -91,8 +92,6 @@ public class Babybot extends OpMode
      */
     @Override
     public void loop() {
-        JewelArmServo.setPosition(Robot.JEWEL_ARM_UP);
-
         if (gamepad1.right_stick_x < -0.2 || gamepad1.right_stick_x > 0.2) {
             telemetry.addData("Drive mode", "strafe");
 
@@ -159,7 +158,7 @@ public class Babybot extends OpMode
             LeftArmServo.setPosition(0.5);
             RightArmServo.setPosition(0.625);
         }  else if (gamepad2.y) { // both open
-            LeftArmServo.setPosition(0.35);
+            LeftArmServo.setPosition(0.4);
             RightArmServo.setPosition(0.475);
         } else if (gamepad2.x) { // left open
             LeftArmServo.setPosition(0.2);

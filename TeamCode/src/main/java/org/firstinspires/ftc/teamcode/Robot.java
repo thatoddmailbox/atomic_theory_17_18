@@ -12,9 +12,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Robot {
-    public static final double JEWEL_ARM_UP = 0.75;
-    public static final double JEWEL_ARM_DOWN = 0.1;
-    public static final double JEWEL_ARM_DOWN_MAX = 0.0;
+    public static final double JEWEL_ARM_UP = 0.9;
+    public static final double JEWEL_ARM_DOWN = 0.3;
+    public static final double JEWEL_ARM_DOWN_MAX = 0.225;
 
     public static final double GLYPH_ARM_LEFT_CLOSE = 0.2;
     public static final double GLYPH_ARM_RIGHT_CLOSE = 0.3;
