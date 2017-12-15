@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -21,6 +22,8 @@ public class Babybot extends OpMode
     private DcMotor FrontRightDrive = null;
     private DcMotor BackLeftDrive = null;
     private DcMotor BackRightDrive = null;
+    private DcMotor LeftIntake = null;
+    private DcMotor RightIntake = null;
 
     private DcMotor LiftMotor = null;
 
@@ -42,6 +45,8 @@ public class Babybot extends OpMode
         FrontRightDrive = hardwareMap.get(DcMotor.class, "FrontRight");
         BackLeftDrive = hardwareMap.get(DcMotor.class, "BackLeft");
         BackRightDrive = hardwareMap.get(DcMotor.class, "BackRight");
+        LeftIntake = hardwareMap.get(DcMotor.class, "LeftIntake");
+        RightIntake = hardwareMap.get(DcMotor.class, "RightIntake");
 
         LiftMotor = hardwareMap.get(DcMotor.class, "Lift");
 
@@ -56,6 +61,9 @@ public class Babybot extends OpMode
         BackLeftDrive.setDirection(DcMotor.Direction.REVERSE);
         BackRightDrive.setDirection(DcMotor.Direction.FORWARD);
         LiftMotor.setDirection(DcMotor.Direction.FORWARD);
+
+        LeftIntake.setDirection(DcMotor.Direction.REVERSE);
+        RightIntake.setDirection(DcMotor.Direction.REVERSE);
 
         LeftArmServo.setDirection(Servo.Direction.FORWARD);
         RightArmServo.setDirection(Servo.Direction.REVERSE);
@@ -163,6 +171,15 @@ public class Babybot extends OpMode
         } else if (gamepad2.x) { // left open
             LeftArmServo.setPosition(0.2);
             RightArmServo.setPosition(0.425);
+        }
+
+        if(gamepad1.right_bumper) {
+            LeftIntake.setPower(200);
+            RightIntake.setPower(200);
+        }
+        if(gamepad1.left_bumper) {
+            LeftIntake.setPower(0);
+            RightIntake.setPower(0);
         }
 
         if (gamepad2.right_bumper) {
