@@ -42,6 +42,8 @@ public abstract class AutonomousOperation extends LinearOpMode {
                 sleep(200);
             }
 
+            sleep(500);
+
             telemetry.addData("r", robot.jewelColor.red());
             telemetry.addData("g", robot.jewelColor.green());
             telemetry.addData("b", robot.jewelColor.blue());
@@ -68,7 +70,7 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
                     robot.leftMotors(-0.3);
                     robot.rightMotors(0.3);
-                    sleep(100);
+                    sleep(150);
 
                     robot.leftMotors(0);
                     robot.rightMotors(0);
@@ -78,7 +80,7 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
                     robot.leftMotors(0.3);
                     robot.rightMotors(-0.3);
-                    sleep(100);
+                    sleep(150);
                 } else {
                     telemetry.addData("hitting", "left");
                     telemetry.update();
@@ -87,7 +89,7 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
                     robot.leftMotors(0.3);
                     robot.rightMotors(-0.3);
-                    sleep(100);
+                    sleep(150);
 
                     robot.leftMotors(0);
                     robot.rightMotors(0);
@@ -97,7 +99,7 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
                     robot.leftMotors(-0.3);
                     robot.rightMotors(0.3);
-                    sleep(100);
+                    sleep(150);
                 }
 
                 robot.leftMotors(0);
@@ -137,7 +139,7 @@ public abstract class AutonomousOperation extends LinearOpMode {
                 ///
 
                 robot.straightDrive(-0.4, -0.4);
-                sleep(675);
+                sleep((getAlliance() == Alliance.RED ? 675 : 725));
                 robot.straightDrive(0, 0);
 
                 ///
@@ -147,13 +149,13 @@ public abstract class AutonomousOperation extends LinearOpMode {
                 if (getAlliance() == Alliance.RED) {
                     robot.leftMotors(-0.4);
                     robot.rightMotors(0.4);
-                    sleep(1200);
+                    sleep(900); // turn duration
                     robot.leftMotors(0);
                     robot.rightMotors(0);
                 } else {
                     robot.leftMotors(0.4);
                     robot.rightMotors(-0.4);
-                    sleep(1200);
+                    sleep(900); //turn duration
                     robot.leftMotors(0);
                     robot.rightMotors(0);
                 }
@@ -161,13 +163,13 @@ public abstract class AutonomousOperation extends LinearOpMode {
                 if (getAlliance() == Alliance.RED) {
                     robot.leftMotors(-0.4);
                     robot.rightMotors(0.4);
-                    sleep(700);
+                    sleep(600);
                     robot.leftMotors(0);
                     robot.rightMotors(0);
                 } else {
                     robot.leftMotors(0.4);
                     robot.rightMotors(-0.4);
-                    sleep(700);
+                    sleep(600);
                     robot.leftMotors(0);
                     robot.rightMotors(0);
                 }
