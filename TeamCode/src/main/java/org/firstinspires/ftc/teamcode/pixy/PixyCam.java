@@ -72,11 +72,14 @@ public class PixyCam extends Sensor {
 
     // interface methods
     public byte readByte() {
+        // check if we have anything we've already read
         if (_currentData == null || _currentData.length == 0 || _currentDataIndex > (_currentData.length - 1)) {
-            // need to read more data
+            // we've used up our cache, so we need to read more data
             _currentData = readChunk();
             _currentDataIndex = 0;
         }
+
+        // return the next available byte
         _currentDataIndex++;
         return _currentData[_currentDataIndex - 1];
     }
@@ -86,6 +89,7 @@ public class PixyCam extends Sensor {
     }
 
     public short readShort() {
+        // pixycam is little endian, so read two bytes and combine them to make a short
         short low = (short)((short)readByte() & (short)0b0000000011111111);
         short high = (short)((short)(readByte() << 8) & (short)0b1111111100000000);
         return (short) (high | low);
@@ -104,6 +108,7 @@ public class PixyCam extends Sensor {
                 _blockType = BlockType.ColorCode;
                 return true;
             } else if (w == PIXY_START_WORDX) {
+                // this means we're off-by-one in the stream, and need to read a byte to realign
                 readByte();
             }
             lastw = w;
@@ -114,28 +119,34 @@ public class PixyCam extends Sensor {
     public boolean fetchFrame() {
         _frame.clear();
 
-        if (!_skipStart) {
-            if (!getStart()) {
+        if (!_skipStart) { // if we aren't skipping the start word
+            boolean foundStart = getStart();
+            if (!foundStart) {
+                // something bad happened, give up
                 return false;
             }
         } else {
+            // we ARE skipping the start word now, but reset the flag for next time
             _skipStart = false;
         }
 
         while (true) {
-            // the next short is either the object checksum or a start word (if start of frame)
+            // we've already read the start word for this frame
+            // this means that the next short is either the object checksum or a start word (if start of frame)
             short checksum = readShort();
             if (checksum == PIXY_START_WORD) { // we've reached the beginning of the next frame
                 _skipStart = true;
                 _blockType = BlockType.Normal;
                 return (_frame.size() > 0);
-            } else if (checksum == PIXY_START_WORD_CC) {
+            } else if (checksum == PIXY_START_WORD_CC) { // we've found a color code block
                 _skipStart = true;
                 _blockType = BlockType.ColorCode;
                 return (_frame.size() > 0);
-            } else if (checksum == 0) {
+            } else if (checksum == 0) { // something bad happened, stop
                 return (_frame.size() > 0);
             }
+
+            // read in the object
 
             PixyObjectBlock object = new PixyObjectBlock();
 
@@ -153,6 +164,11 @@ public class PixyCam extends Sensor {
 
             _frame.add(object);
 
+            // the next word is going to be either
+            // a) the start of a new frame (so we'll read a start word)
+            // b) the start of a new object (so we'll also read a start word, but it might be a color code word)
+            // c) something else (so something bad happened and we give up)
+            // if it's a), then there will be two start words in a row, and we read one of the start words now, and one at the top of the loop
             short w = readShort();
             if (w == PIXY_START_WORD) {
                 _blockType = BlockType.Normal;
