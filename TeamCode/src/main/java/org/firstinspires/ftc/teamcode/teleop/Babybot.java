@@ -17,7 +17,7 @@ public class Babybot extends OpMode
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
-    // drivetrain
+    // Variables to initilize drivetrain
     private DcMotor FrontLeftDrive = null;
     private DcMotor FrontRightDrive = null;
     private DcMotor BackLeftDrive = null;
@@ -33,8 +33,6 @@ public class Babybot extends OpMode
 
     private double SpeedMultiplier = 0.4;
     private double StrafeSpeedMultiplier = 0.6;
-
-    private boolean lastB;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -100,10 +98,16 @@ public class Babybot extends OpMode
      */
     @Override
     public void loop() {
-        if (gamepad1.right_stick_x < -0.2 || gamepad1.right_stick_x > 0.2) {
+        if (gamepad1.right_stick_x < -0.2 || gamepad1.right_stick_x > 0.2) { // If the controls are in strafing position
             telemetry.addData("Drive mode", "strafe");
 
-            double direction = gamepad1.right_stick_x;
+            double direction = gamepad1.right_stick_x; // set direction to gamepad right stick left and right
+
+            /*
+             * strafing is weird...
+             * a good manual on how to turn the wheels is here: https://goo.gl/UW863x
+             * BUT THAT MANUAL IS FOR FRC! PLEASE DISREGARD ALL CODE ON THAT SITE! JUST LOOK AT THE TOP, ONCE YOU GET TO CODE, STOP READING.
+             */
 
             FrontLeftDrive.setPower(direction*StrafeSpeedMultiplier);
             BackLeftDrive.setPower(-direction*StrafeSpeedMultiplier);
@@ -114,13 +118,6 @@ public class Babybot extends OpMode
 
             double leftPower;
             double rightPower;
-
-            // Choose to drive using either Tank Mode, or POV Mode
-            // Comment out the method that's not used.  The default below is POV
-            // POV Mode uses left stick to go forward, and right stick to turn.
-            // - This uses basic math to combine motions and is easier to drive straight.
-//            double drive = -gamepad1.left_stick_y;
-//            double turn  =  gamepad1.left_stick_x;
 
             double drive = 0;
             if (gamepad1.dpad_up) {
@@ -136,7 +133,7 @@ public class Babybot extends OpMode
                 turn = -1;
             }
 
-            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
+            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ; //changes it to be between -1 and 1
             rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
             // Tank Mode uses one stick to control each wheel.
@@ -151,6 +148,10 @@ public class Babybot extends OpMode
             BackRightDrive.setPower(rightPower*SpeedMultiplier);
         }
 
+        /*
+         * LIFT CODE:
+         */
+
         if (gamepad2.dpad_up) {
             LiftMotor.setPower(-0.5);
         } else if (gamepad2.dpad_down) {
@@ -159,6 +160,9 @@ public class Babybot extends OpMode
             LiftMotor.setPower(0.0);
         }
 
+        /*
+         * ARM CODE:
+         */
         if (gamepad2.a) { //close
             LeftArmServo.setPosition(0.2);
             RightArmServo.setPosition(0.3);
@@ -173,6 +177,10 @@ public class Babybot extends OpMode
             RightArmServo.setPosition(0.425);
         }
 
+        /*
+         * FRONT WHEELS CODE:
+         */
+
         if(gamepad1.right_bumper) {
             LeftIntake.setPower(200);
             RightIntake.setPower(200);
@@ -181,6 +189,10 @@ public class Babybot extends OpMode
             LeftIntake.setPower(0);
             RightIntake.setPower(0);
         }
+
+        /*
+         * JEWEL ARM CODE:
+         */
 
         if (gamepad2.right_bumper) {
             double position = JewelArmServo.getPosition();
@@ -194,6 +206,10 @@ public class Babybot extends OpMode
             JewelArmServo.setPosition(position);
         }
 
+        /*
+         * SPEED MULTIPLIER CODE:
+         */
+
         if (gamepad1.y) {
             SpeedMultiplier = 0.8;
         } else if (gamepad1.a) {
@@ -203,6 +219,10 @@ public class Babybot extends OpMode
         if (gamepad1.right_trigger > 0.5) {
             SpeedMultiplier = 0.5;
         }
+
+        /*
+         * MORE ARM CODE:
+         */
 
         if (gamepad2.right_trigger > 0.5) {
             LeftArmServo.setPosition(0.5);
@@ -218,7 +238,6 @@ public class Babybot extends OpMode
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
 
-        lastB = gamepad1.b;
     }
 
     /*
