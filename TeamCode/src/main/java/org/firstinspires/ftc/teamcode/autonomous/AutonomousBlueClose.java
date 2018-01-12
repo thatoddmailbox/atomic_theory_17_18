@@ -9,9 +9,9 @@ import org.firstinspires.ftc.teamcode.misc.BalancingStonePosition;
 public class AutonomousBlueClose extends AutonomousOperation {
     public Alliance getAlliance() {
         return Alliance.BLUE;
-    }
+    } //Set Alliance to blue
 
     public BalancingStonePosition getBalancingStonePosition() {
-        return BalancingStonePosition.CLOSE;
+        return BalancingStonePosition.CLOSE; //Set balancing stone position to close.
     }
 }
