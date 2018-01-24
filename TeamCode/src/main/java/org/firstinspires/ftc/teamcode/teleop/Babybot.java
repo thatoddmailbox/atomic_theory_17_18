@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -17,62 +15,64 @@ public class Babybot extends OpMode
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
-    // Variables to initilize drivetrain
-    private DcMotor FrontLeftDrive = null;
-    private DcMotor FrontRightDrive = null;
-    private DcMotor BackLeftDrive = null;
-    private DcMotor BackRightDrive = null;
-    private DcMotor LeftIntake = null;
-    private DcMotor RightIntake = null;
+    private DcMotor frontLeftMotor = null;
+    private DcMotor frontRightMotor = null;
+    private DcMotor backLeftMotor = null;
+    private DcMotor backRightMotor = null;
 
-    private DcMotor LiftMotor = null;
+    private DcMotor leftIntakeMotor = null;
+    private DcMotor rightIntakeMotor = null;
 
-    private Servo LeftArmServo = null;
-    private Servo RightArmServo = null;
-    private Servo JewelArmServo = null;
+    private DcMotor liftMotor = null;
 
-    private double SpeedMultiplier = 0.4;
-    private double StrafeSpeedMultiplier = 0.6;
+    private Servo leftArmServo = null;
+    private Servo rightArmServo = null;
+    private Servo jewelArmServo = null;
+
+    private double driveSpeedMultiplier = 0.4;
+    private final double strafeSpeedMultiplier = 0.6;
 
     /*
      * Code to run ONCE when the driver hits INIT
      */
     @Override
     public void init() {
-        FrontLeftDrive = hardwareMap.get(DcMotor.class, "FrontLeft");
-        FrontRightDrive = hardwareMap.get(DcMotor.class, "FrontRight");
-        BackLeftDrive = hardwareMap.get(DcMotor.class, "BackLeft");
-        BackRightDrive = hardwareMap.get(DcMotor.class, "BackRight");
-        LeftIntake = hardwareMap.get(DcMotor.class, "LeftIntake");
-        RightIntake = hardwareMap.get(DcMotor.class, "RightIntake");
+        // initialize the motors and servos
+        frontLeftMotor = hardwareMap.get(DcMotor.class, "FrontLeft");
+        frontRightMotor = hardwareMap.get(DcMotor.class, "FrontRight");
+        backLeftMotor = hardwareMap.get(DcMotor.class, "BackLeft");
+        backRightMotor = hardwareMap.get(DcMotor.class, "BackRight");
 
-        LiftMotor = hardwareMap.get(DcMotor.class, "Lift");
+        leftIntakeMotor = hardwareMap.get(DcMotor.class, "LeftIntake");
+        rightIntakeMotor = hardwareMap.get(DcMotor.class, "RightIntake");
 
-        LeftArmServo = hardwareMap.get(Servo.class, "LeftArm");
-        RightArmServo = hardwareMap.get(Servo.class, "RightArm");
-        JewelArmServo = hardwareMap.get(Servo.class, "jewel arm lower");
+        liftMotor = hardwareMap.get(DcMotor.class, "Lift");
+
+        leftArmServo = hardwareMap.get(Servo.class, "LeftArm");
+        rightArmServo = hardwareMap.get(Servo.class, "RightArm");
+        jewelArmServo = hardwareMap.get(Servo.class, "jewel arm lower");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        FrontLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        FrontRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        BackLeftDrive.setDirection(DcMotor.Direction.REVERSE);
-        BackRightDrive.setDirection(DcMotor.Direction.FORWARD);
-        LiftMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        liftMotor.setDirection(DcMotor.Direction.FORWARD);
 
-        LeftIntake.setDirection(DcMotor.Direction.REVERSE);
-        RightIntake.setDirection(DcMotor.Direction.REVERSE);
+        leftIntakeMotor.setDirection(DcMotor.Direction.REVERSE);
+        rightIntakeMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        LeftArmServo.setDirection(Servo.Direction.FORWARD);
-        RightArmServo.setDirection(Servo.Direction.REVERSE);
-        JewelArmServo.setDirection(Servo.Direction.FORWARD);
-        JewelArmServo.setPosition(Robot.JEWEL_ARM_UP);
+        leftArmServo.setDirection(Servo.Direction.FORWARD);
+        rightArmServo.setDirection(Servo.Direction.REVERSE);
+        jewelArmServo.setDirection(Servo.Direction.FORWARD);
+        jewelArmServo.setPosition(Robot.JEWEL_ARM_UP);
 
-        FrontLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        BackLeftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        FrontRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        BackRightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        LiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -98,21 +98,25 @@ public class Babybot extends OpMode
      */
     @Override
     public void loop() {
-        if (gamepad1.right_stick_x < -0.2 || gamepad1.right_stick_x > 0.2) { // If the controls are in strafing position
+        // If the controls are in strafing position
+        if (gamepad1.right_stick_x < -0.2 || gamepad1.right_stick_x > 0.2) {
             telemetry.addData("Drive mode", "strafe");
 
-            double direction = gamepad1.right_stick_x; // set direction to gamepad right stick left and right
+            // get the right game pad stick's direction
+            double direction = gamepad1.right_stick_x;
 
             /*
              * strafing is weird...
              * a good manual on how to turn the wheels is here: https://goo.gl/UW863x
-             * BUT THAT MANUAL IS FOR FRC! PLEASE DISREGARD ALL CODE ON THAT SITE! JUST LOOK AT THE TOP, ONCE YOU GET TO CODE, STOP READING.
+             * IMPORTANT: BUT THAT MANUAL IS FOR FRC! PLEASE DISREGARD ALL CODE ON THAT SITE!
+             * JUST LOOK AT THE TOP, ONCE YOU GET TO CODE, STOP READING.
              */
 
-            FrontLeftDrive.setPower(direction*StrafeSpeedMultiplier);
-            BackLeftDrive.setPower(-direction*StrafeSpeedMultiplier);
-            FrontRightDrive.setPower(-direction*StrafeSpeedMultiplier);
-            BackRightDrive.setPower(direction*StrafeSpeedMultiplier);
+            // set the motors
+            frontLeftMotor.setPower(direction* strafeSpeedMultiplier);
+            backLeftMotor.setPower(-direction* strafeSpeedMultiplier);
+            frontRightMotor.setPower(-direction* strafeSpeedMultiplier);
+            backRightMotor.setPower(direction* strafeSpeedMultiplier);
         } else {
             telemetry.addData("Drive mode", "normal");
 
@@ -133,7 +137,9 @@ public class Babybot extends OpMode
                 turn = -1;
             }
 
-            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ; //changes it to be between -1 and 1
+            // restrict the left and right power to be
+            // between -1 and 1
+            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
             rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
             // Tank Mode uses one stick to control each wheel.
@@ -142,10 +148,10 @@ public class Babybot extends OpMode
             // rightPower = -gamepad1.right_stick_y ;
 
             // Send calculated power to wheels
-            FrontLeftDrive.setPower(leftPower*SpeedMultiplier);
-            FrontRightDrive.setPower(rightPower*SpeedMultiplier);
-            BackLeftDrive.setPower(leftPower*SpeedMultiplier);
-            BackRightDrive.setPower(rightPower*SpeedMultiplier);
+            frontLeftMotor.setPower(leftPower* driveSpeedMultiplier);
+            frontRightMotor.setPower(rightPower* driveSpeedMultiplier);
+            backLeftMotor.setPower(leftPower* driveSpeedMultiplier);
+            backRightMotor.setPower(rightPower* driveSpeedMultiplier);
         }
 
         /*
@@ -153,28 +159,28 @@ public class Babybot extends OpMode
          */
 
         if (gamepad2.dpad_up) {
-            LiftMotor.setPower(-0.5);
+            liftMotor.setPower(-0.5);
         } else if (gamepad2.dpad_down) {
-            LiftMotor.setPower(0.5);
+            liftMotor.setPower(0.5);
         } else {
-            LiftMotor.setPower(0.0);
+            liftMotor.setPower(0.0);
         }
 
         /*
          * ARM CODE:
          */
         if (gamepad2.a) { //close
-            LeftArmServo.setPosition(0.2);
-            RightArmServo.setPosition(0.3);
+            leftArmServo.setPosition(0.2);
+            rightArmServo.setPosition(0.3);
         } else if (gamepad2.b) { // all the way open
-            LeftArmServo.setPosition(0.5);
-            RightArmServo.setPosition(0.625);
+            leftArmServo.setPosition(0.5);
+            rightArmServo.setPosition(0.625);
         }  else if (gamepad2.y) { // both open
-            LeftArmServo.setPosition(0.4);
-            RightArmServo.setPosition(0.475);
+            leftArmServo.setPosition(0.4);
+            rightArmServo.setPosition(0.475);
         } else if (gamepad2.x) { // left open
-            LeftArmServo.setPosition(0.2);
-            RightArmServo.setPosition(0.425);
+            leftArmServo.setPosition(0.2);
+            rightArmServo.setPosition(0.425);
         }
 
         /*
@@ -182,12 +188,12 @@ public class Babybot extends OpMode
          */
 
         if(gamepad1.right_bumper) {
-            LeftIntake.setPower(200);
-            RightIntake.setPower(200);
+            leftIntakeMotor.setPower(200);
+            rightIntakeMotor.setPower(200);
         }
         if(gamepad1.left_bumper) {
-            LeftIntake.setPower(0);
-            RightIntake.setPower(0);
+            leftIntakeMotor.setPower(0);
+            rightIntakeMotor.setPower(0);
         }
 
         /*
@@ -195,49 +201,45 @@ public class Babybot extends OpMode
          */
 
         if (gamepad2.right_bumper) {
-            double position = JewelArmServo.getPosition();
+            double position = jewelArmServo.getPosition();
             position += 0.1;
             position = Math.max(position, 1.0);
-            JewelArmServo.setPosition(position);
+            jewelArmServo.setPosition(position);
         } else if (gamepad2.left_bumper) {
-            double position = JewelArmServo.getPosition();
+            double position = jewelArmServo.getPosition();
             position -= 0.1;
             position = Math.min(position, 0.0);
-            JewelArmServo.setPosition(position);
+            jewelArmServo.setPosition(position);
         }
 
         /*
          * SPEED MULTIPLIER CODE:
          */
-
         if (gamepad1.y) {
-            SpeedMultiplier = 0.8;
+            driveSpeedMultiplier = 0.8;
         } else if (gamepad1.a) {
-            SpeedMultiplier = 0.4;
+            driveSpeedMultiplier = 0.4;
         }
 
         if (gamepad1.right_trigger > 0.5) {
-            SpeedMultiplier = 0.5;
+            driveSpeedMultiplier = 0.5;
         }
 
         /*
          * MORE ARM CODE:
          */
-
         if (gamepad2.right_trigger > 0.5) {
-            LeftArmServo.setPosition(0.5);
-            RightArmServo.setPosition(0.7);
-
+            leftArmServo.setPosition(0.5);
+            rightArmServo.setPosition(0.7);
         }
         if (gamepad2.left_trigger > 0.5) {
-            LeftArmServo.setPosition(0.65);
-            RightArmServo.setPosition(0.5);
+            leftArmServo.setPosition(0.65);
+            rightArmServo.setPosition(0.5);
         }
 
-        telemetry.addData("Speed", SpeedMultiplier);
+        telemetry.addData("Speed", driveSpeedMultiplier);
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
-
     }
 
     /*

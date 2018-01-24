@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.pixy;
 
-import android.util.Log;
-
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 
