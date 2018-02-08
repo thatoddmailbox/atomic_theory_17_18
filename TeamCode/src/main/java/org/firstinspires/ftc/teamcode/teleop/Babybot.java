@@ -20,14 +20,16 @@ public class Babybot extends OpMode
     private DcMotor backLeftMotor = null;
     private DcMotor backRightMotor = null;
 
-    private DcMotor leftIntakeMotor = null;
-    private DcMotor rightIntakeMotor = null;
+    private DcMotor relicMotor = null;
 
     private DcMotor liftMotor = null;
 
     private Servo leftArmServo = null;
     private Servo rightArmServo = null;
     private Servo jewelArmServo = null;
+
+    private Servo relicArmPitch = null;
+    private Servo relicArmClaw = null;
 
     private double driveSpeedMultiplier = 0.4;
     private final double strafeSpeedMultiplier = 0.6;
@@ -43,14 +45,16 @@ public class Babybot extends OpMode
         backLeftMotor = hardwareMap.get(DcMotor.class, "BackLeft");
         backRightMotor = hardwareMap.get(DcMotor.class, "BackRight");
 
-        leftIntakeMotor = hardwareMap.get(DcMotor.class, "LeftIntake");
-        rightIntakeMotor = hardwareMap.get(DcMotor.class, "RightIntake");
+        relicMotor = hardwareMap.get(DcMotor.class, "RelicMotor");
 
         liftMotor = hardwareMap.get(DcMotor.class, "Lift");
 
         leftArmServo = hardwareMap.get(Servo.class, "LeftArm");
         rightArmServo = hardwareMap.get(Servo.class, "RightArm");
         jewelArmServo = hardwareMap.get(Servo.class, "jewel arm lower");
+
+        relicArmPitch = hardwareMap.get(Servo.class, "RelicArmPitch");
+        relicArmClaw = hardwareMap.get(Servo.class, "RelicArmClaw");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -60,8 +64,7 @@ public class Babybot extends OpMode
         backRightMotor.setDirection(DcMotor.Direction.FORWARD);
         liftMotor.setDirection(DcMotor.Direction.FORWARD);
 
-        leftIntakeMotor.setDirection(DcMotor.Direction.REVERSE);
-        rightIntakeMotor.setDirection(DcMotor.Direction.REVERSE);
+        relicMotor.setDirection(DcMotor.Direction.REVERSE);
 
         leftArmServo.setDirection(Servo.Direction.FORWARD);
         rightArmServo.setDirection(Servo.Direction.REVERSE);
@@ -76,6 +79,9 @@ public class Babybot extends OpMode
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
+
+        relicArmPitch.setDirection(Servo.Direction.FORWARD);
+        relicArmClaw.setDirection(Servo.Direction.FORWARD);
     }
 
     /*
@@ -108,7 +114,7 @@ public class Babybot extends OpMode
             /*
              * strafing is weird...
              * a good manual on how to turn the wheels is here: https://goo.gl/UW863x
-             * IMPORTANT: BUT THAT MANUAL IS FOR FRC! PLEASE DISREGARD ALL CODE ON THAT SITE!
+             * BUT THAT MANUAL IS FOR FRC! PLEASE DISREGARD ALL CODE ON THAT SITE!
              * JUST LOOK AT THE TOP, ONCE YOU GET TO CODE, STOP READING.
              */
 
@@ -184,16 +190,13 @@ public class Babybot extends OpMode
         }
 
         /*
-         * FRONT WHEELS CODE:
+         * RELIC CODE:
          */
 
         if(gamepad1.right_bumper) {
-            leftIntakeMotor.setPower(200);
-            rightIntakeMotor.setPower(200);
-        }
-        if(gamepad1.left_bumper) {
-            leftIntakeMotor.setPower(0);
-            rightIntakeMotor.setPower(0);
+            relicMotor.setPower(0.75);
+        } else if(gamepad1.left_bumper) {
+            relicMotor.setPower(-0.75);
         }
 
         /*
@@ -210,6 +213,21 @@ public class Babybot extends OpMode
             position -= 0.1;
             position = Math.min(position, 0.0);
             jewelArmServo.setPosition(position);
+        }
+
+        /*
+         * RELIC ARM CODE:
+         */
+        if (gamepad2.left_trigger != 0) { //close
+            relicArmPitch.setPosition(Range.clip(relicArmPitch.getPosition()+0.2, 0.0, 1.0));
+        } else if (gamepad2.right_trigger != 0) { // all the way open
+            relicArmPitch.setPosition(Range.clip(relicArmPitch.getPosition()-0.2, 0.0, 1.0));
+        }
+
+        if (gamepad2.dpad_left != 0) { //close
+            relicArmClaw.setPosition(Range.clip(relicArmClaw.getPosition()+0.2, 0.0, 1.0));
+        } else if (gamepad2.dpad_right != 0) { // all the way open
+            relicArmClaw.setPosition(Range.clip(relicArmClaw.getPosition()-0.2, 0.0, 1.0));
         }
 
         /*
