@@ -224,9 +224,9 @@ public class Babybot extends OpMode
             relicArmPitch.setPosition(Range.clip(relicArmPitch.getPosition()-0.2, 0.0, 1.0));
         }
 
-        if (gamepad2.dpad_left != 0) { //close
+        if (gamepad2.dpad_left) { //close
             relicArmClaw.setPosition(Range.clip(relicArmClaw.getPosition()+0.2, 0.0, 1.0));
-        } else if (gamepad2.dpad_right != 0) { // all the way open
+        } else if (gamepad2.dpad_right) { // all the way open
             relicArmClaw.setPosition(Range.clip(relicArmClaw.getPosition()-0.2, 0.0, 1.0));
         }
 
