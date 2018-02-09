@@ -28,8 +28,8 @@ public class Babybot extends OpMode
     private Servo rightArmServo = null;
     private Servo jewelArmServo = null;
 
-    private Servo relicArmPitch = null;
-    private Servo relicArmClaw = null;
+    private Servo relicClawOver = null;
+    private Servo relicClawClose = null;
 
     private double driveSpeedMultiplier = 0.4;
     private final double strafeSpeedMultiplier = 0.6;
@@ -53,8 +53,8 @@ public class Babybot extends OpMode
         rightArmServo = hardwareMap.get(Servo.class, "RightArm");
         jewelArmServo = hardwareMap.get(Servo.class, "jewel arm lower");
 
-        relicArmPitch = hardwareMap.get(Servo.class, "RelicArmPitch");
-        relicArmClaw = hardwareMap.get(Servo.class, "RelicArmClaw");
+        relicClawOver = hardwareMap.get(Servo.class, "relicClawOver");
+        relicClawClose = hardwareMap.get(Servo.class, "relicClawClose");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -80,8 +80,8 @@ public class Babybot extends OpMode
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
 
-        relicArmPitch.setDirection(Servo.Direction.FORWARD);
-        relicArmClaw.setDirection(Servo.Direction.FORWARD);
+        relicClawOver.setDirection(Servo.Direction.FORWARD);
+        relicClawClose.setDirection(Servo.Direction.FORWARD);
     }
 
     /*
@@ -193,10 +193,12 @@ public class Babybot extends OpMode
          * RELIC CODE:
          */
 
-        if(gamepad1.right_bumper) {
+        if(gamepad2.dpad_left) {
             relicMotor.setPower(0.75);
-        } else if(gamepad1.left_bumper) {
+        } else if(gamepad2.dpad_right) {
             relicMotor.setPower(-0.75);
+        }else {
+            relicMotor.setPower(0);
         }
 
         /*
@@ -218,16 +220,16 @@ public class Babybot extends OpMode
         /*
          * RELIC ARM CODE:
          */
-        if (gamepad2.left_trigger != 0) { //close
-            relicArmPitch.setPosition(Range.clip(relicArmPitch.getPosition()+0.2, 0.0, 1.0));
-        } else if (gamepad2.right_trigger != 0) { // all the way open
-            relicArmPitch.setPosition(Range.clip(relicArmPitch.getPosition()-0.2, 0.0, 1.0));
+        if (gamepad1.right_bumper) { //close
+            relicClawOver.setPosition(Range.clip(relicClawOver.getPosition()+0.2, 0.0, 1.0));
+        } else if (gamepad1.left_bumper) { // all the way open
+            relicClawOver.setPosition(Range.clip(relicClawOver.getPosition()-0.2, 0.0, 1.0));
         }
 
-        if (gamepad2.dpad_left) { //close
-            relicArmClaw.setPosition(Range.clip(relicArmClaw.getPosition()+0.2, 0.0, 1.0));
-        } else if (gamepad2.dpad_right) { // all the way open
-            relicArmClaw.setPosition(Range.clip(relicArmClaw.getPosition()-0.2, 0.0, 1.0));
+        if (gamepad1.x) { //close
+            relicClawClose.setPosition(Range.clip(relicClawClose.getPosition()+0.2, 0.0, 1.0));
+        } else if (gamepad1.b) { // all the way open
+            relicClawClose.setPosition(Range.clip(relicClawClose.getPosition()-0.2, 0.0, 1.0));
         }
 
         /*
