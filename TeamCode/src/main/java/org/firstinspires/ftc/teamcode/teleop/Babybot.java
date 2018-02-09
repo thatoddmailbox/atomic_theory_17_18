@@ -221,7 +221,8 @@ public class Babybot extends OpMode
          * RELIC ARM CODE:
          */
         if (gamepad1.right_bumper) { //close
-            relicClawOver.setPosition(Range.clip(relicClawOver.getPosition()+0.2, 0.0, 1.0));
+            relicClawOver.setPosition(0.5);
+
         } else if (gamepad1.left_bumper) { // all the way open
             relicClawOver.setPosition(Range.clip(relicClawOver.getPosition()-0.2, 0.0, 1.0));
         }
