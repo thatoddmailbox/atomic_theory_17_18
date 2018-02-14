@@ -173,20 +173,20 @@ public class Babybot extends OpMode
         }
 
         /*
-         * ARM CODE:
+         * ARM CODE: PSA: THE SERVO NAMES ARE BACKWARDS. DEAL WITH IT.
          */
-        if (gamepad2.a) { //close
-            leftArmServo.setPosition(0.2);
-            rightArmServo.setPosition(0.3);
+        if (gamepad2.a) { //closed all the way
+            leftArmServo.setPosition(0.0);
+            rightArmServo.setPosition(0.35);
         } else if (gamepad2.b) { // all the way open
             leftArmServo.setPosition(0.5);
             rightArmServo.setPosition(0.625);
         }  else if (gamepad2.y) { // both open
             leftArmServo.setPosition(0.4);
             rightArmServo.setPosition(0.475);
-        } else if (gamepad2.x) { // left open
-            leftArmServo.setPosition(0.2);
-            rightArmServo.setPosition(0.425);
+        } else if (gamepad2.x) { // partially closed
+            leftArmServo.setPosition(0.15);
+            rightArmServo.setPosition(0.45);
         }
 
         /*
