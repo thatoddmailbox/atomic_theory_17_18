@@ -24,8 +24,8 @@ public class Babybot extends OpMode
 
     private DcMotor liftMotor = null;
 
-    private Servo leftArmServo = null;
     private Servo rightArmServo = null;
+    private Servo leftArmServo = null;
     private Servo jewelArmServo = null;
 
     private Servo relicClawOver = null;
@@ -49,8 +49,8 @@ public class Babybot extends OpMode
 
         liftMotor = hardwareMap.get(DcMotor.class, "Lift");
 
-        leftArmServo = hardwareMap.get(Servo.class, "LeftArm");
-        rightArmServo = hardwareMap.get(Servo.class, "RightArm");
+        rightArmServo = hardwareMap.get(Servo.class, "LeftArm");
+        leftArmServo = hardwareMap.get(Servo.class, "RightArm");
         jewelArmServo = hardwareMap.get(Servo.class, "jewel arm lower");
 
         relicClawOver = hardwareMap.get(Servo.class, "relicClawOver");
@@ -66,8 +66,8 @@ public class Babybot extends OpMode
 
         relicMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        leftArmServo.setDirection(Servo.Direction.FORWARD);
-        rightArmServo.setDirection(Servo.Direction.REVERSE);
+        rightArmServo.setDirection(Servo.Direction.FORWARD);
+        leftArmServo.setDirection(Servo.Direction.REVERSE);
         jewelArmServo.setDirection(Servo.Direction.FORWARD);
         jewelArmServo.setPosition(Robot.JEWEL_ARM_UP);
 
@@ -173,20 +173,21 @@ public class Babybot extends OpMode
         }
 
         /*
-         * ARM CODE: PSA: THE SERVO NAMES ARE BACKWARDS. DEAL WITH IT.
+         * ARM CODE:
          */
+
         if (gamepad2.a) { //closed all the way
-            leftArmServo.setPosition(0.0);
-            rightArmServo.setPosition(0.35);
+            rightArmServo.setPosition(0.0);
+            leftArmServo.setPosition(0.35);
         } else if (gamepad2.b) { // all the way open
-            leftArmServo.setPosition(0.5);
-            rightArmServo.setPosition(0.625);
+            rightArmServo.setPosition(0.5);
+            leftArmServo.setPosition(0.625);
         }  else if (gamepad2.y) { // both open
-            leftArmServo.setPosition(0.4);
-            rightArmServo.setPosition(0.475);
+            rightArmServo.setPosition(0.4);
+            leftArmServo.setPosition(0.475);
         } else if (gamepad2.x) { // partially closed
-            leftArmServo.setPosition(0.15);
-            rightArmServo.setPosition(0.45);
+            rightArmServo.setPosition(0.15);
+            leftArmServo.setPosition(0.45);
         }
 
         /*
@@ -250,12 +251,12 @@ public class Babybot extends OpMode
          * MORE ARM CODE:
          */
         if (gamepad2.right_trigger > 0.5) {
-            leftArmServo.setPosition(0.5);
-            rightArmServo.setPosition(0.7);
+            rightArmServo.setPosition(0.5);
+            leftArmServo.setPosition(0.7);
         }
         if (gamepad2.left_trigger > 0.5) {
-            leftArmServo.setPosition(0.65);
-            rightArmServo.setPosition(0.5);
+            rightArmServo.setPosition(0.65);
+            leftArmServo.setPosition(0.5);
         }
 
         telemetry.addData("Speed", driveSpeedMultiplier);
