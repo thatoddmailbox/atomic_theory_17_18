@@ -76,6 +76,8 @@ public class Babybot extends OpMode
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        relicMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -197,8 +199,9 @@ public class Babybot extends OpMode
             relicMotor.setPower(0.75);
         } else if(gamepad2.dpad_right) {
             relicMotor.setPower(-0.75);
-        }else {
-            relicMotor.setPower(0);
+        }
+        else {
+            relicMotor.setPower(0.0);
         }
 
         /*
@@ -218,19 +221,19 @@ public class Babybot extends OpMode
         }
 
         /*
-         * RELIC ARM CODE:
+         * RELIC ARM CODE: // servo names are opposite!!! DEAL
          */
-        if (gamepad1.right_bumper) { //close
-            relicClawOver.setPosition(0.5);
+        if (gamepad1.x) { //close
+            relicClawOver.setPosition(0.75);
 
-        } else if (gamepad1.left_bumper) { // all the way open
-            relicClawOver.setPosition(Range.clip(relicClawOver.getPosition()-0.2, 0.0, 1.0));
+        } else if (gamepad1.b) { // all the way open
+            relicClawOver.setPosition(0.0);
         }
 
-        if (gamepad1.x) { //close
-            relicClawClose.setPosition(Range.clip(relicClawClose.getPosition()+0.2, 0.0, 1.0));
-        } else if (gamepad1.b) { // all the way open
-            relicClawClose.setPosition(Range.clip(relicClawClose.getPosition()-0.2, 0.0, 1.0));
+        if (gamepad1.right_bumper) { //close
+            relicClawClose.setPosition(1.0);
+        } else if (gamepad1.left_bumper) { // all the way open
+            relicClawClose.setPosition(0.0);
         }
 
         /*
