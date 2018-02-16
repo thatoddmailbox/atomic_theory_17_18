@@ -76,7 +76,7 @@ public class Babybot extends OpMode
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        relicMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    relicMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         // Tell the driver that initialization is complete.
@@ -181,15 +181,12 @@ public class Babybot extends OpMode
         if (gamepad2.a) { //closed all the way
             rightArmServo.setPosition(0.0);
             leftArmServo.setPosition(0.35);
-        } else if (gamepad2.b) { // all the way open
-            rightArmServo.setPosition(0.5);
-            leftArmServo.setPosition(0.625);
         }  else if (gamepad2.y) { // both open
-            rightArmServo.setPosition(0.4);
-            leftArmServo.setPosition(0.475);
-        } else if (gamepad2.x) { // partially closed
-            rightArmServo.setPosition(0.15);
-            leftArmServo.setPosition(0.45);
+            rightArmServo.setPosition(0.2);
+            leftArmServo.setPosition(0.5);
+        } else if (gamepad2.b) { // both open
+            rightArmServo.setPosition(0.45);
+            leftArmServo.setPosition(0.75);
         }
 
         /*
