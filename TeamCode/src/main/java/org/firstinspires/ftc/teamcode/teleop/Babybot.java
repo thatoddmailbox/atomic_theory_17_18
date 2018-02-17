@@ -76,7 +76,7 @@ public class Babybot extends OpMode
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    relicMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        relicMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
         // Tell the driver that initialization is complete.
@@ -179,15 +179,15 @@ public class Babybot extends OpMode
          */
 
         if (gamepad2.a) { //closed all the way
-            rightArmServo.setPosition(0.0);
+            rightArmServo.setPosition(0.45);
             leftArmServo.setPosition(0.35);
         }  else if (gamepad2.y) { // both open
-            rightArmServo.setPosition(0.2);
-            leftArmServo.setPosition(0.5);
+            rightArmServo.setPosition(0.55);
+            leftArmServo.setPosition(0.45);
         } else if (gamepad2.b) { // both open
-            rightArmServo.setPosition(0.45);
-            leftArmServo.setPosition(0.75);
-        }
+            rightArmServo.setPosition(0.73);
+            leftArmServo.setPosition(0.65); //lower = closer
+         }
 
         /*
          * RELIC CODE:
@@ -221,13 +221,16 @@ public class Babybot extends OpMode
         /*
          * RELIC ARM CODE: // servo names are opposite!!! DEAL
          */
-        if (gamepad1.x) { //close
-            relicClawOver.setPosition(0.75);
 
-        } else if (gamepad1.b) { // all the way open
+        //carisa worry:
+        if (gamepad1.x) { //open grabber
+            relicClawOver.setPosition(1.0);
+
+        } else if (gamepad1.b) { // closed grabber
             relicClawOver.setPosition(0.0);
         }
 
+        //stop worrying
         if (gamepad1.right_bumper) { //close
             relicClawClose.setPosition(1.0);
         } else if (gamepad1.left_bumper) { // all the way open
@@ -243,16 +246,19 @@ public class Babybot extends OpMode
             driveSpeedMultiplier = 0.4;
         }
 
-        if (gamepad1.right_trigger > 0.5) {
-            driveSpeedMultiplier = 0.5;
+        //worry
+        if (gamepad1.right_trigger > 0.5) { //releasing relic
+            relicClawOver.setPosition(0.75);
+            relicClawClose.setPosition(0.0);
         }
+        //stop worry
 
         /*
          * MORE ARM CODE:
          */
         if (gamepad2.right_trigger > 0.5) {
-            rightArmServo.setPosition(0.5);
-            leftArmServo.setPosition(0.7);
+            rightArmServo.setPosition(0.73);
+            leftArmServo.setPosition(0.65);
         }
         if (gamepad2.left_trigger > 0.5) {
             rightArmServo.setPosition(0.65);
