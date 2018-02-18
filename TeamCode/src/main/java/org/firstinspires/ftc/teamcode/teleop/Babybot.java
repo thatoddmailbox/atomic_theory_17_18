@@ -32,7 +32,7 @@ public class Babybot extends OpMode
     private Servo relicClawClose = null;
 
     private double driveSpeedMultiplier = 0.4;
-    private final double strafeSpeedMultiplier = 0.6;
+    private final double strafeSpeedMultiplier = 0.9;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -179,15 +179,17 @@ public class Babybot extends OpMode
          */
 
         if (gamepad2.a) { //closed all the way
-            rightArmServo.setPosition(0.45);
-            leftArmServo.setPosition(0.35);
+            rightArmServo.setPosition(0.425);
+            leftArmServo.setPosition(0.3);
         }  else if (gamepad2.y) { // both open
             rightArmServo.setPosition(0.55);
-            leftArmServo.setPosition(0.45);
+            leftArmServo.setPosition(0.6);
         } else if (gamepad2.b) { // both open
             rightArmServo.setPosition(0.73);
             leftArmServo.setPosition(0.65); //lower = closer
-         }
+        }
+
+
 
         /*
          * RELIC CODE:
@@ -258,7 +260,7 @@ public class Babybot extends OpMode
          */
         if (gamepad2.right_trigger > 0.5) {
             rightArmServo.setPosition(0.73);
-            leftArmServo.setPosition(0.65);
+            leftArmServo.setPosition(0.75);
         }
         if (gamepad2.left_trigger > 0.5) {
             rightArmServo.setPosition(0.65);

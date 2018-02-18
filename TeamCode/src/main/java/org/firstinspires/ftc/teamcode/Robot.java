@@ -32,6 +32,9 @@ public class Robot {
     public Servo leftArmServo;
     public Servo rightArmServo;
 
+    public Servo relicClawOver;
+    public Servo relicClawClose;
+
     public BNO055IMU imu;
 
     public ColorSensor jewelColor;
@@ -60,6 +63,11 @@ public class Robot {
         jewelArmLower = hardwareMap.servo.get("jewel arm lower");
         leftArmServo = hardwareMap.servo.get("LeftArm");
         rightArmServo = hardwareMap.servo.get("RightArm");
+
+        relicClawOver = hardwareMap.servo.get("relicClawOver");
+        relicClawClose = hardwareMap.servo.get("relicClawClose");
+
+        relicClawClose.setPosition(0.0);
 
         leftArmServo.setDirection(Servo.Direction.FORWARD);
         rightArmServo.setDirection(Servo.Direction.REVERSE);

@@ -7,49 +7,44 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name="Servo Test", group="Tests")
 public class ServoTest extends OpMode {
-    Servo servo;
+    Servo leftArm;
+    Servo rightArm;
 
-    Servo jewelArmLower;
-
-    boolean lastA = false;
-    boolean lastB = false;
-    boolean lastY = false;
+    boolean last1A = false;
+    boolean last1B = false;
+    boolean last2A = false;
+    boolean last2B = false;
 
     @Override
     public void init() {
-        jewelArmLower = hardwareMap.servo.get("jewel arm lower");
+        leftArm = hardwareMap.servo.get("LeftArm");
+        rightArm = hardwareMap.servo.get("RightArm");
 
-        servo = jewelArmLower;
-
-        if (servo == jewelArmLower) {
-            servo.setPosition(0.5);
-        } else {
-            servo.setPosition(0.0);
-        }
+        leftArm.setPosition(0.5);
+        rightArm.setPosition(0.5);
     }
 
     @Override
     public void loop() {
-        telemetry.addData("Position", servo.getPosition());
-        telemetry.addData("Servo", (servo == jewelArmLower ? "lower" : "twist"));
+        telemetry.addData("1 Position", leftArm.getPosition());
+        telemetry.addData("2 Position", rightArm.getPosition());
         telemetry.update();
 
-        if (gamepad1.a && !lastA) {
-            servo.setPosition(servo.getPosition() + 0.05);
-        } else if (gamepad1.b && !lastB) {
-            servo.setPosition(servo.getPosition() - 0.05);
+        if (gamepad1.a && !last1A) {
+            leftArm.setPosition(leftArm.getPosition() + 0.05);
+        } else if (gamepad1.b && !last1B) {
+            leftArm.setPosition(leftArm.getPosition() - 0.05);
         }
 
-//        if (gamepad1.y && !lastY) {
-//            if (servo == jewelArmLower) {
-//                servo = jewelArmTwist;
-//            } else {
-//                servo = jewelArmLower;
-//            }
-//        }
+        if (gamepad2.a && !last2A) {
+            rightArm.setPosition(rightArm.getPosition() + 0.05);
+        } else if (gamepad2.b && !last2B) {
+            rightArm.setPosition(rightArm.getPosition() - 0.05);
+        }
 
-        lastA = gamepad1.a;
-        lastB = gamepad1.b;
-        lastY = gamepad1.y;
+        last1A = gamepad1.a;
+        last1B = gamepad1.b;
+        last2A = gamepad2.a;
+        last2B = gamepad2.b;
     }
 }
