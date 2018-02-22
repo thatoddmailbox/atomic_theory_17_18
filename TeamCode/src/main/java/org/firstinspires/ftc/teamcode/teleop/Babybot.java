@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -58,10 +59,10 @@ public class Babybot extends OpMode
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
-        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotor.Direction.FORWARD);
+        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
         liftMotor.setDirection(DcMotor.Direction.FORWARD);
 
         relicMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -106,61 +107,122 @@ public class Babybot extends OpMode
      */
     @Override
     public void loop() {
-        // If the controls are in strafing position
-        if (gamepad1.right_stick_x < -0.2 || gamepad1.right_stick_x > 0.2) {
-            telemetry.addData("Drive mode", "strafe");
 
-            // get the right game pad stick's direction
-            double direction = gamepad1.right_stick_x;
-
-            /*
-             * strafing is weird...
-             * a good manual on how to turn the wheels is here: https://goo.gl/UW863x
-             * BUT THAT MANUAL IS FOR FRC! PLEASE DISREGARD ALL CODE ON THAT SITE!
-             * JUST LOOK AT THE TOP, ONCE YOU GET TO CODE, STOP READING.
-             */
-
-            // set the motors
-            frontLeftMotor.setPower(direction* strafeSpeedMultiplier);
-            backLeftMotor.setPower(-direction* strafeSpeedMultiplier);
-            frontRightMotor.setPower(-direction* strafeSpeedMultiplier);
-            backRightMotor.setPower(direction* strafeSpeedMultiplier);
-        } else {
-            telemetry.addData("Drive mode", "normal");
-
-            double leftPower;
-            double rightPower;
-
-            double drive = 0;
-            if (gamepad1.dpad_up) {
-                drive = 1;
-            } else if (gamepad1.dpad_down) {
-                drive = -1;
-            }
-
-            double turn = 0;
-            if (gamepad1.dpad_right) {
-                turn = 1;
-            } else if (gamepad1.dpad_left) {
-                turn = -1;
-            }
-
-            // restrict the left and right power to be
-            // between -1 and 1
-            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
-
-            // Tank Mode uses one stick to control each wheel.
-            // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            // leftPower  = -gamepad1.left_stick_y ;
-            // rightPower = -gamepad1.right_stick_y ;
-
-            // Send calculated power to wheels
-            frontLeftMotor.setPower(leftPower* driveSpeedMultiplier);
-            frontRightMotor.setPower(rightPower* driveSpeedMultiplier);
-            backLeftMotor.setPower(leftPower* driveSpeedMultiplier);
-            backRightMotor.setPower(rightPower* driveSpeedMultiplier);
+        if(gamepad1.left_bumper) {
+            driveSpeedMultiplier = 0.4;
+        } else { driveSpeedMultiplier = 1.0; }
+         //backward
+        if(gamepad1.dpad_down){
+            frontLeftMotor.setPower(1 * driveSpeedMultiplier);
+            backLeftMotor.setPower(1 * driveSpeedMultiplier);
+            frontRightMotor.setPower(1 * driveSpeedMultiplier);
+            backRightMotor.setPower(1 * driveSpeedMultiplier);
+        } //forward
+        else if(gamepad1.dpad_up){
+            frontLeftMotor.setPower(-1 * driveSpeedMultiplier);
+            backLeftMotor.setPower(-1 * driveSpeedMultiplier);
+            frontRightMotor.setPower(-1 * driveSpeedMultiplier);
+            backRightMotor.setPower(-1 * driveSpeedMultiplier);
+        } //curves right -- dont work
+//        else if(gamepad1.left_stick_y < -.7 && gamepad1.right_stick_y <.5 && gamepad1.right_stick_y > -.5) {
+//            frontLeftMotor.setPower(-.8);
+//            backLeftMotor.setPower(-.8);
+//            frontRightMotor.setPower(-.5);
+//            backRightMotor.setPower(-.5);
+//        } //curves left -- dont work
+//        else if(gamepad1.right_stick_y < -.7 && gamepad1.left_stick_y <.5 && gamepad1.left_stick_y > -.5) {
+//            frontLeftMotor.setPower(-.5);
+//            backLeftMotor.setPower(-.5);
+//            frontRightMotor.setPower(-.8);
+//            backRightMotor.setPower(-.8);
+//        } // turns counterclockwise
+        else if(gamepad1.dpad_left){
+            frontLeftMotor.setPower(.8 * driveSpeedMultiplier);
+            backLeftMotor.setPower(.8 * driveSpeedMultiplier);
+            frontRightMotor.setPower(-.8 * driveSpeedMultiplier);
+            backRightMotor.setPower(-.8 * driveSpeedMultiplier);
+        } // turns clockwise
+        else if(gamepad1.dpad_right){
+            frontLeftMotor.setPower(-.8 * driveSpeedMultiplier);
+            backLeftMotor.setPower(-.8 * driveSpeedMultiplier);
+            frontRightMotor.setPower(.8 * driveSpeedMultiplier);
+            backRightMotor.setPower(.8 * driveSpeedMultiplier);
         }
+        else if (gamepad1.right_stick_x < -.7) {
+            frontLeftMotor.setPower(1);
+            backLeftMotor.setPower(-1);
+            frontRightMotor.setPower(-1);
+            backRightMotor.setPower(1);
+        }
+        else if (gamepad1.right_stick_x > .7) {
+            frontLeftMotor.setPower(-1);
+            backLeftMotor.setPower(1);
+            frontRightMotor.setPower(1);
+            backRightMotor.setPower(-1);
+        }
+        else {
+            frontLeftMotor.setPower(0);
+            backLeftMotor.setPower(0);
+            frontRightMotor.setPower(0);
+            backRightMotor.setPower(0);
+
+        }
+        // If the controls are in strafing position
+//        if (gamepad1.right_stick_x < -0.2 || gamepad1.right_stick_x > 0.2) {
+//            telemetry.addData("Drive mode", "strafe");
+//
+//            // get the right game pad stick's direction
+//            double direction = gamepad1.right_stick_x;
+//
+//            /*
+//             * strafing is weird...
+//             * a good manual on how to turn the wheels is here: https://goo.gl/UW863x
+//             * BUT THAT MANUAL IS FOR FRC! PLEASE DISREGARD ALL CODE ON THAT SITE!
+//             * JUST LOOK AT THE TOP, ONCE YOU GET TO CODE, STOP READING.
+//             */
+//
+//            // set the motors
+//            frontLeftMotor.setPower(direction* strafeSpeedMultiplier);
+//            backLeftMotor.setPower(-direction* strafeSpeedMultiplier);
+//            frontRightMotor.setPower(-direction* strafeSpeedMultiplier);
+//            backRightMotor.setPower(direction* strafeSpeedMultiplier);
+//        } else {
+//            telemetry.addData("Drive mode", "normal");
+//
+//            double leftPower;
+//            double rightPower;
+//
+//            double drive = 0;
+//            if (gamepad1.dpad_up) {
+//                drive = 1;
+//            } else if (gamepad1.dpad_down) {
+//                drive = -1;
+//            }
+//
+//            double turn = 0;
+//            if (gamepad1.dpad_right) {
+//                turn = 1;
+//            } else if (gamepad1.dpad_left) {
+//                turn = -1;
+//            }
+//
+//
+//            // restrict the left and right power to be
+//            // between -1 and 1
+//            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
+//            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+//
+//            // Tank Mode uses one stick to control each wheel.
+//            // - This requires no math, but it is hard to drive forward slowly and keep straight.
+//            // leftPower  = -gamepad1.left_stick_y ;
+//            // rightPower = -gamepad1.right_stick_y ;
+//
+////            // Send calculated power to wheels
+////            frontLeftMotor.setPower(leftPower* driveSpeedMultiplier);
+////            frontRightMotor.setPower(rightPower* driveSpeedMultiplier);
+////            backLeftMotor.setPower(leftPower* driveSpeedMultiplier);
+////            backRightMotor.setPower(rightPower* driveSpeedMultiplier);
+//        }
 
         /*
          * LIFT CODE:
@@ -179,14 +241,17 @@ public class Babybot extends OpMode
          */
 
         if (gamepad2.a) { //closed all the way
-            rightArmServo.setPosition(0.425);
-            leftArmServo.setPosition(0.3);
-        }  else if (gamepad2.y) { // both open
+            rightArmServo.setPosition(0.35);
+            leftArmServo.setPosition(0.4);
+        }  else if (gamepad2.y) { // both open partially
             rightArmServo.setPosition(0.55);
-            leftArmServo.setPosition(0.6);
-        } else if (gamepad2.b) { // both open
-            rightArmServo.setPosition(0.73);
-            leftArmServo.setPosition(0.65); //lower = closer
+            leftArmServo.setPosition(0.65);
+        } else if (gamepad2.b) { // right open
+            rightArmServo.setPosition(0.7);
+            leftArmServo.setPosition(0.55); //lower = closer
+        } else if (gamepad2.x) { // left open
+            rightArmServo.setPosition(0.45);
+            leftArmServo.setPosition(0.9);
         }
 
 
@@ -242,11 +307,11 @@ public class Babybot extends OpMode
         /*
          * SPEED MULTIPLIER CODE:
          */
-        if (gamepad1.y) {
-            driveSpeedMultiplier = 0.8;
-        } else if (gamepad1.a) {
-            driveSpeedMultiplier = 0.4;
-        }
+//        if (gamepad1.y) {
+//            driveSpeedMultiplier = 0.8;
+//        } else if (gamepad1.a) {
+//            driveSpeedMultiplier = 0.4;
+//        }
 
         //worry
         if (gamepad1.right_trigger > 0.5) { //releasing relic
@@ -259,8 +324,8 @@ public class Babybot extends OpMode
          * MORE ARM CODE:
          */
         if (gamepad2.right_trigger > 0.5) {
-            rightArmServo.setPosition(0.73);
-            leftArmServo.setPosition(0.75);
+            rightArmServo.setPosition(0.7);
+            leftArmServo.setPosition(0.9);
         }
         if (gamepad2.left_trigger > 0.5) {
             rightArmServo.setPosition(0.65);
