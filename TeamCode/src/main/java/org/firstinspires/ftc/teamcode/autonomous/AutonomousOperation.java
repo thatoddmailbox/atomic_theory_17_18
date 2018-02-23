@@ -18,28 +18,24 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
     Robot robot;
 
-    public static final String TAG = "Vuforia VuMark Sample";
-
-    OpenGLMatrix lastLocation = null;
-
-    VuforiaLocalizer vuforia;
-
-
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot();
         robot.init(this);
 
-        telemetry.addLine("NOT READY. IF ASKED IF READY GIVE THUMBS DOWN. VUFORIA IS STILL INITALIZING. DO NOT RUN AUTO.");
+        telemetry.addLine("Starting Vuforia...");
         telemetry.update();
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = "AR+iLgj/////AAAAmS9bkSnmY0kFlliVvKlHO6srskUOSAet/+7CxNX1r58PDBPcdJ1Oez2dp8+Sou9eNRa1xwyAe8axEgE9MkAaD9JcOBlOJMBW3ThvB1/2ycv7OQga4kuIgOtQ3w5It14k9P7hVU9aVpXAZFrkoykwDNumaT08hmFk+cJtFznF0CprLnGNyQ8wuLB7hBqx5xWzt6JPEdF5Pn3eNgEyCR76MhegCvD+V5i+D+YojEUgrt7aUH7SiEQJDcr6RFilzIGjpxN9r7j7xfp7yki3D1HzidnXSavjEEzn13dHKmdu9wfdyY9+SvCTUEPDwklWiRC9Bj1rVMRR4MBbPS3m2ClknaDqKHNxIjBfPaH4MP0Tdcdg ";
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+
+        VuforiaLocalizer vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+        VuforiaTrackables relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
 
+        relicTrackables.activate();
 
         telemetry.addLine("Ready to go!");
         telemetry.update();
@@ -48,9 +44,9 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
         int vuMarkAttempt = 1;
-        while(vuMark == RelicRecoveryVuMark.UNKNOWN && vuMarkAttempt <= 70) {
+        while(vuMark == RelicRecoveryVuMark.UNKNOWN && vuMarkAttempt <= 20) {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            telemetry.addData("Cipher", "Not visible, waiting " + (((70-vuMarkAttempt))/10) + " more seconds.");
+            telemetry.addData("Cipher", "Not visible, waiting " + (((20-vuMarkAttempt))/10) + " more seconds.");
             telemetry.addData("VuMark Detection", vuMark);
             telemetry.update();
             sleep(100);
@@ -61,10 +57,9 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-
-                // grab the block
+            // grab the block
             robot.glyphArms(Robot.GLYPH_ARM_LEFT_CLOSE, Robot.GLYPH_ARM_RIGHT_CLOSE);
-            sleep(400);
+            sleep(500);
             robot.lift(-0.5); //lift lift
             sleep(400);
             robot.lift(0.0);
@@ -199,16 +194,26 @@ public abstract class AutonomousOperation extends LinearOpMode {
                     robot.rightMotors(0);
                 }
             } else {
+                int turnDuration = 700;
+
+//                if (vuMark == RelicRecoveryVuMark.LEFT) {
+//                    turnDuration = 700;
+//                } else if (vuMark == RelicRecoveryVuMark.CENTER) {
+//                    turnDuration = 600;
+//                } else if (vuMark == RelicRecoveryVuMark.RIGHT) {
+//                    turnDuration = 650;
+//                }
+
                 if (getAlliance() == Alliance.RED) {
                     robot.leftMotors(-0.4);
                     robot.rightMotors(0.4);
-                    sleep(600);
+                    sleep(turnDuration);
                     robot.leftMotors(0);
                     robot.rightMotors(0);
                 } else {
                     robot.leftMotors(0.4);
                     robot.rightMotors(-0.4);
-                    sleep(600);
+                    sleep(turnDuration);
                     robot.leftMotors(0);
                     robot.rightMotors(0);
                 }
