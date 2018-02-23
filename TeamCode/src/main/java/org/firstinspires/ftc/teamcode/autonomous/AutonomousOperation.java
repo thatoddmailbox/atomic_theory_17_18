@@ -2,6 +2,12 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.misc.Alliance;
 import org.firstinspires.ftc.teamcode.misc.BalancingStonePosition;
@@ -12,10 +18,26 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
     Robot robot;
 
+    public static final String TAG = "Vuforia VuMark Sample";
+
+    OpenGLMatrix lastLocation = null;
+
+    VuforiaLocalizer vuforia;
+
+
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot();
         robot.init(this);
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        parameters.vuforiaLicenseKey = "AR+iLgj/////AAAAmS9bkSnmY0kFlliVvKlHO6srskUOSAet/+7CxNX1r58PDBPcdJ1Oez2dp8+Sou9eNRa1xwyAe8axEgE9MkAaD9JcOBlOJMBW3ThvB1/2ycv7OQga4kuIgOtQ3w5It14k9P7hVU9aVpXAZFrkoykwDNumaT08hmFk+cJtFznF0CprLnGNyQ8wuLB7hBqx5xWzt6JPEdF5Pn3eNgEyCR76MhegCvD+V5i+D+YojEUgrt7aUH7SiEQJDcr6RFilzIGjpxN9r7j7xfp7yki3D1HzidnXSavjEEzn13dHKmdu9wfdyY9+SvCTUEPDwklWiRC9Bj1rVMRR4MBbPS3m2ClknaDqKHNxIjBfPaH4MP0Tdcdg ";
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+        VuforiaTrackable relicTemplate = relicTrackables.get(0);
+
 
         telemetry.addLine("Ready to go!");
         telemetry.update();
@@ -23,7 +45,19 @@ public abstract class AutonomousOperation extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            // grab the block
+
+            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+            int vuMarkAttempt = 1;
+            while(vuMark != RelicRecoveryVuMark.UNKNOWN) {
+                if(vuMarkAttempt <= 14) {
+                    telemetry.addData("Cipher", "Not Visible, attempt " + vuMarkAttempt);
+                    sleep(500);
+                    vuMarkAttempt++;
+                } else { break; }
+            }
+            telemetry.addData("VuMark", "%s visible", vuMark);
+
+                // grab the block
             robot.glyphArms(Robot.GLYPH_ARM_LEFT_CLOSE, Robot.GLYPH_ARM_RIGHT_CLOSE);
             sleep(400);
             robot.lift(-0.5); //lift lift
