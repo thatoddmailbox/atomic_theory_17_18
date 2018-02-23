@@ -48,14 +48,14 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             int vuMarkAttempt = 1;
-            while(vuMark != RelicRecoveryVuMark.UNKNOWN) {
-                if(vuMarkAttempt <= 14) {
-                    telemetry.addData("Cipher", "Not Visible, attempt " + vuMarkAttempt);
-                    sleep(500);
-                    vuMarkAttempt++;
-                } else { break; }
+            while(vuMark == RelicRecoveryVuMark.UNKNOWN && vuMarkAttempt <= 14) {
+                telemetry.addData("Cipher", "Not Visible, attempt " + vuMarkAttempt);
+                telemetry.update();
+                sleep(500);
+                vuMarkAttempt++;
             }
             telemetry.addData("VuMark", "%s visible", vuMark);
+            telemetry.update();
 
                 // grab the block
             robot.glyphArms(Robot.GLYPH_ARM_LEFT_CLOSE, Robot.GLYPH_ARM_RIGHT_CLOSE);
