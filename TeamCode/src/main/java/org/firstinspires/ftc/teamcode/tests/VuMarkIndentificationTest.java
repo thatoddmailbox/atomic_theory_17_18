@@ -66,7 +66,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * is explained in {@link ConceptVuforiaNavigation}.
  */
 
-@Autonomous(name="\uD83D\uDCF7VuMark ID Test", group ="Tests")
+@Autonomous(name="\uD83D\uDCF7 VuMark ID Test", group ="Tests")
 public class VuMarkIndentificationTest extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
@@ -125,6 +125,7 @@ public class VuMarkIndentificationTest extends LinearOpMode {
 
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
+        int vuMarkAttempt = 1;
         waitForStart();
 
         relicTrackables.activate();
@@ -138,40 +139,25 @@ public class VuMarkIndentificationTest extends LinearOpMode {
              * UNKNOWN will be returned by {@link RelicRecoveryVuMark#from(VuforiaTrackable)}.
              */
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-
-                /* Found an instance of the template. In the actual game, you will probably
-                 * loop until this condition occurs, then move on to act accordingly depending
-                 * on which VuMark was visible. */
-                telemetry.addData("VuMark", "%s visible", vuMark);
-
-                /* For fun, we also exhibit the navigational pose. In the Relic Recovery game,
-                 * it is perhaps unlikely that you will actually need to act on this pose information, but
-                 * we illustrate it nevertheless, for completeness. */
-                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
-                telemetry.addData("Pose", format(pose));
-
-                /* We further illustrate how to decompose the pose into useful rotational and
-                 * translational components */
-                if (pose != null) {
-                    VectorF trans = pose.getTranslation();
-                    Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-
-                    // Extract the X, Y, and Z components of the offset of the target relative to the robot
-                    double tX = trans.get(0);
-                    double tY = trans.get(1);
-                    double tZ = trans.get(2);
-
-                    // Extract the rotational components of the target relative to the robot
-                    double rX = rot.firstAngle;
-                    double rY = rot.secondAngle;
-                    double rZ = rot.thirdAngle;
-                }
+            while(vuMark == RelicRecoveryVuMark.UNKNOWN && vuMarkAttempt <= 7000) {
+                vuMark = RelicRecoveryVuMark.from(relicTemplate);
+                telemetry.addData("Cipher", "Not visible, waiting " + (((7000-vuMarkAttempt))/1000) + " more seconds.");
+                telemetry.addData("VuMark Detection", vuMark);
+                telemetry.update();
+                sleep(1);
+                vuMarkAttempt++;
             }
-            else {
-                telemetry.addData("VuMark", "not visible");
+            vuMarkAttempt = 999999999;
+            telemetry.addData("VuMark Detection", "Loop Broken");
+            if(vuMark == RelicRecoveryVuMark.CENTER) {
+                telemetry.addData("VuMark Detection", "Center Detected");
+            } else if (vuMark == RelicRecoveryVuMark.LEFT) {
+                telemetry.addData("VuMark Detection", "Left Detected");
+            } else if (vuMark == RelicRecoveryVuMark.RIGHT){
+                telemetry.addData("VuMark Detection", "Right Detected");
+            } else if (vuMark == RelicRecoveryVuMark.UNKNOWN){
+                telemetry.addData("VuMark Detection", "Unknown VuMark");
             }
-
             telemetry.update();
         }
     }

@@ -30,6 +30,8 @@ public abstract class AutonomousOperation extends LinearOpMode {
         robot = new Robot();
         robot.init(this);
 
+        telemetry.addLine("NOT READY. IF ASKED IF READY GIVE THUMBS DOWN. VUFORIA IS STILL INITALIZING. DO NOT RUN AUTO.");
+        telemetry.update();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = "AR+iLgj/////AAAAmS9bkSnmY0kFlliVvKlHO6srskUOSAet/+7CxNX1r58PDBPcdJ1Oez2dp8+Sou9eNRa1xwyAe8axEgE9MkAaD9JcOBlOJMBW3ThvB1/2ycv7OQga4kuIgOtQ3w5It14k9P7hVU9aVpXAZFrkoykwDNumaT08hmFk+cJtFznF0CprLnGNyQ8wuLB7hBqx5xWzt6JPEdF5Pn3eNgEyCR76MhegCvD+V5i+D+YojEUgrt7aUH7SiEQJDcr6RFilzIGjpxN9r7j7xfp7yki3D1HzidnXSavjEEzn13dHKmdu9wfdyY9+SvCTUEPDwklWiRC9Bj1rVMRR4MBbPS3m2ClknaDqKHNxIjBfPaH4MP0Tdcdg ";
@@ -48,12 +50,15 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             int vuMarkAttempt = 1;
-            while(vuMark == RelicRecoveryVuMark.UNKNOWN && vuMarkAttempt <= 14) {
-                telemetry.addData("Cipher", "Not Visible, attempt " + vuMarkAttempt);
+            while(vuMark == RelicRecoveryVuMark.UNKNOWN && vuMarkAttempt <= 7000) {
+                vuMark = RelicRecoveryVuMark.from(relicTemplate);
+                telemetry.addData("Cipher", "Not visible, waiting " + (((7000-vuMarkAttempt))/1000) + " more seconds.");
+                telemetry.addData("VuMark Detection", vuMark);
                 telemetry.update();
-                sleep(500);
+                sleep(1);
                 vuMarkAttempt++;
             }
+            vuMarkAttempt = 999999999;
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
