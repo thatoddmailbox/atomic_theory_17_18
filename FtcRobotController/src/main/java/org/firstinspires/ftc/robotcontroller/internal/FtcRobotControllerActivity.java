@@ -492,11 +492,19 @@ public class FtcRobotControllerActivity extends Activity
       startActivityForResult(intentConfigure, RequestCode.CONFIGURE_ROBOT_CONTROLLER.ordinal());
     }
     else if (id == R.id.action_settings) {
-	  // historical: this once erroneously used FTC_CONFIGURE_REQUEST_CODE_ROBOT_CONTROLLER
+      // historical: this once erroneously used FTC_CONFIGURE_REQUEST_CODE_ROBOT_CONTROLLER
       Intent settingsIntent = new Intent(AppUtil.getDefContext(), FtcRobotControllerSettingsActivity.class);
       startActivityForResult(settingsIntent, RequestCode.SETTINGS_ROBOT_CONTROLLER.ordinal());
       return true;
     }
+    // modifications start
+    else if (id == R.id.action_wifi_channel_change) {
+      // a dependency on TeamCode would be circular, so indirectly open the activity via an intent
+      Intent channelIntent = new Intent("org.firstinspires.ftc.teamcode.WifiChannelChangeAction");
+      startActivity(channelIntent);
+      return true;
+    }
+    // modifications end
     else if (id == R.id.action_about) {
       Intent intent = new Intent(AppUtil.getDefContext(), AboutActivity.class);
       intent.putExtra(LaunchActivityConstantsList.ABOUT_ACTIVITY_CONNECTION_TYPE, networkType);
