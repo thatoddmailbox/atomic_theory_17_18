@@ -31,9 +31,12 @@ public class Babybot extends OpMode
 
     private Servo relicClawOver = null;
     private Servo relicClawClose = null;
+    boolean relicClose = false;
+    boolean leftTriggerDown = false;
+
 
     private double driveSpeedMultiplier = 0.4;
-    private final double strafeSpeedMultiplier = 0.9;
+    private double strafeSpeedMultiplier = 0.6;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -85,6 +88,8 @@ public class Babybot extends OpMode
 
         relicClawOver.setDirection(Servo.Direction.FORWARD);
         relicClawClose.setDirection(Servo.Direction.FORWARD);
+
+
     }
 
     /*
@@ -110,7 +115,8 @@ public class Babybot extends OpMode
 
         if(gamepad1.left_bumper) {
             driveSpeedMultiplier = 0.4;
-        } else { driveSpeedMultiplier = 1.0; }
+            strafeSpeedMultiplier = 0.6;
+        } else { driveSpeedMultiplier = 1.0; strafeSpeedMultiplier = 1.0; }
          //backward
         if(gamepad1.dpad_down){
             frontLeftMotor.setPower(1 * driveSpeedMultiplier);
@@ -149,16 +155,16 @@ public class Babybot extends OpMode
             backRightMotor.setPower(.8 * driveSpeedMultiplier);
         }
         else if (gamepad1.right_stick_x < -.7) {
-            frontLeftMotor.setPower(1);
-            backLeftMotor.setPower(-1);
-            frontRightMotor.setPower(-1);
-            backRightMotor.setPower(1);
+            frontLeftMotor.setPower(1 * strafeSpeedMultiplier);
+            backLeftMotor.setPower(-1 * strafeSpeedMultiplier);
+            frontRightMotor.setPower(-1 * strafeSpeedMultiplier);
+            backRightMotor.setPower(1 * strafeSpeedMultiplier);
         }
         else if (gamepad1.right_stick_x > .7) {
-            frontLeftMotor.setPower(-1);
-            backLeftMotor.setPower(1);
-            frontRightMotor.setPower(1);
-            backRightMotor.setPower(-1);
+            frontLeftMotor.setPower(-1 * strafeSpeedMultiplier);
+            backLeftMotor.setPower(1 * strafeSpeedMultiplier);
+            frontRightMotor.setPower(1 * strafeSpeedMultiplier);
+            backRightMotor.setPower(-1 * strafeSpeedMultiplier);
         }
         else {
             frontLeftMotor.setPower(0);
@@ -241,17 +247,17 @@ public class Babybot extends OpMode
          */
 
         if (gamepad2.a) { //closed all the way
-            rightArmServo.setPosition(0.35);
-            leftArmServo.setPosition(0.4);
+            rightArmServo.setPosition(0.2);
+            leftArmServo.setPosition(0.25);
         }  else if (gamepad2.y) { // both open partially
-            rightArmServo.setPosition(0.55);
-            leftArmServo.setPosition(0.65);
+            rightArmServo.setPosition(0.45);
+            leftArmServo.setPosition(0.5);
         } else if (gamepad2.b) { // right open
             rightArmServo.setPosition(0.7);
-            leftArmServo.setPosition(0.55); //lower = closer
+            leftArmServo.setPosition(0.4); //lower = closer
         } else if (gamepad2.x) { // left open
-            rightArmServo.setPosition(0.45);
-            leftArmServo.setPosition(0.9);
+            rightArmServo.setPosition(0.35);
+            leftArmServo.setPosition(0.7);
         }
 
 
@@ -274,35 +280,32 @@ public class Babybot extends OpMode
          */
 
         if (gamepad2.right_bumper) {
-            double position = jewelArmServo.getPosition();
-            position += 0.1;
-            position = Math.max(position, 1.0);
-            jewelArmServo.setPosition(position);
+            relicClawOver.setPosition(1.0);
         } else if (gamepad2.left_bumper) {
-            double position = jewelArmServo.getPosition();
-            position -= 0.1;
-            position = Math.min(position, 0.0);
-            jewelArmServo.setPosition(position);
+            relicClawOver.setPosition(0.0);
         }
+
+        if(gamepad2.left_stick_button){
+            relicClawClose.setPosition(1.0);
+        } else if(gamepad2.right_stick_button){
+            relicClawClose.setPosition(0.3);
+        }
+        if (gamepad1.left_stick_button || gamepad1.right_stick_button) {
+            jewelArmServo.setPosition(Robot.JEWEL_ARM_UP);
+        }
+
 
         /*
          * RELIC ARM CODE: // servo names are opposite!!! DEAL
          */
 
-        //carisa worry:
-        if (gamepad1.x) { //open grabber
-            relicClawOver.setPosition(1.0);
 
-        } else if (gamepad1.b) { // closed grabber
-            relicClawOver.setPosition(0.0);
-        }
 
-        //stop worrying
-        if (gamepad1.right_bumper) { //close
-            relicClawClose.setPosition(1.0);
-        } else if (gamepad1.left_bumper) { // all the way open
-            relicClawClose.setPosition(0.0);
-        }
+//        if (gamepad1.right_bumper) { //close
+//            relicClawClose.setPosition(1.0);
+//        } else if (gamepad1.left_bumper) { // all the way open
+//            relicClawClose.setPosition(0.0);
+//        }
 
         /*
          * SPEED MULTIPLIER CODE:
@@ -314,23 +317,23 @@ public class Babybot extends OpMode
 //        }
 
         //worry
-        if (gamepad1.right_trigger > 0.5) { //releasing relic
-            relicClawOver.setPosition(0.75);
-            relicClawClose.setPosition(0.0);
-        }
+//        if (gamepad1.right_trigger > 0.5) { //releasing relic
+//            relicClawOver.setPosition(0.75);
+//            relicClawClose.setPosition(0.0);
+//        }
         //stop worry
 
         /*
          * MORE ARM CODE:
          */
         if (gamepad2.right_trigger > 0.5) {
-            rightArmServo.setPosition(0.7);
+            rightArmServo.setPosition(0.9);
             leftArmServo.setPosition(0.9);
         }
-        if (gamepad2.left_trigger > 0.5) {
-            rightArmServo.setPosition(0.65);
-            leftArmServo.setPosition(0.5);
-        }
+//        if (gamepad2.left_trigger > 0.5) {
+//            rightArmServo.setPosition(0.65);
+//            leftArmServo.setPosition(0.5);
+//        }
 
         telemetry.addData("Speed", driveSpeedMultiplier);
         telemetry.addData("Status", "Run Time: " + runtime.toString());

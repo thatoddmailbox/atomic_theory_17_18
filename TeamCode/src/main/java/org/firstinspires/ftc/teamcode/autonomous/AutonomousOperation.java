@@ -25,7 +25,7 @@ public abstract class AutonomousOperation extends LinearOpMode {
         while (opModeIsActive()) {
             // grab the block
             robot.glyphArms(Robot.GLYPH_ARM_LEFT_CLOSE, Robot.GLYPH_ARM_RIGHT_CLOSE);
-            sleep(200);
+            sleep(400);
             robot.lift(-0.5); //lift lift
             sleep(400);
             robot.lift(0.0);
