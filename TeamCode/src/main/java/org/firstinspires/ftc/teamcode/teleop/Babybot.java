@@ -280,7 +280,7 @@ public class Babybot extends OpMode
          */
 
         if (gamepad2.right_bumper) {
-            relicClawOver.setPosition(1.0);
+            relicClawOver.setPosition(0.7);
         } else if (gamepad2.left_bumper) {
             relicClawOver.setPosition(0.0);
         }
@@ -327,8 +327,8 @@ public class Babybot extends OpMode
          * MORE ARM CODE:
          */
         if (gamepad2.right_trigger > 0.5) {
-            rightArmServo.setPosition(0.9);
-            leftArmServo.setPosition(0.9);
+            rightArmServo.setPosition(0.8);
+            leftArmServo.setPosition(0.8);
         }
 //        if (gamepad2.left_trigger > 0.5) {
 //            rightArmServo.setPosition(0.65);

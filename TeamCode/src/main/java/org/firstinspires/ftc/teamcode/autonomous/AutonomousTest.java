@@ -27,21 +27,15 @@ public class AutonomousTest extends AutonomousOperation {
         waitForStart();
 
         while (opModeIsActive()) {
-            robot.strafeLeft(0.8);
-            sleep(1400);
-            robot.straightDrive(0, 0);
-            sleep(2000);
+            //robot.moveDistance(-500, 0.5);
 
-            robot.turnToHeading(-90, 0.65);
-            sleep(2000);
+            robot.strafeDistance(200, 0.3);
 
-            robot.strafeRight(0.8);
-            sleep(700);
-            robot.strafeRight(0.4);
-            sleep(400);
+//            robot.straightDrive(-0.6, -0.6);
+//            sleep(2000);
+//            robot.straightDrive(0, 0);
 
-            robot.turnToHeading(-90, 0.65);
-            sleep(2000);
+            sleep(5000);
 
             break;
         }

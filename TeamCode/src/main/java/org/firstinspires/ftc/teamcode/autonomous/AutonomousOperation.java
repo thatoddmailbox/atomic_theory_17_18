@@ -20,6 +20,8 @@ public abstract class AutonomousOperation extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        int blueNegativeFactor = (getAlliance() == Alliance.RED ? 1 : -1);
+
         robot = new Robot();
         robot.init(this);
 
@@ -194,46 +196,44 @@ public abstract class AutonomousOperation extends LinearOpMode {
                     robot.rightMotors(0);
                 }
             } else {
-                int turnDuration = 700;
+                int firstStrafeTime;
+                int secondStrafeTime;
 
-//                if (vuMark == RelicRecoveryVuMark.LEFT) {
-//                    turnDuration = 700;
-//                } else if (vuMark == RelicRecoveryVuMark.CENTER) {
-//                    turnDuration = 600;
-//                } else if (vuMark == RelicRecoveryVuMark.RIGHT) {
-//                    turnDuration = 650;
-//                }
-
-                if (getAlliance() == Alliance.RED) {
-                    robot.leftMotors(-0.4);
-                    robot.rightMotors(0.4);
-                    sleep(turnDuration);
-                    robot.leftMotors(0);
-                    robot.rightMotors(0);
-                } else {
-                    robot.leftMotors(0.4);
-                    robot.rightMotors(-0.4);
-                    sleep(turnDuration);
-                    robot.leftMotors(0);
-                    robot.rightMotors(0);
+                if (vuMark == RelicRecoveryVuMark.LEFT) {
+                    firstStrafeTime = 1000;
+                    secondStrafeTime = 400;
+                } else if (vuMark == RelicRecoveryVuMark.CENTER || vuMark == RelicRecoveryVuMark.UNKNOWN) {
+                    firstStrafeTime = 900;
+                    secondStrafeTime = 300;
+                } else { // vuMark == RelicRecoveryVuMark.RIGHT
+                    firstStrafeTime = 700;
+                    secondStrafeTime = 300;
                 }
 
-                ///
-                sleep(200);
-                ///
+                robot.moveDistance(-400, 0.5);
+                sleep(1000);
 
-                robot.straightDrive(-0.3, -0.3);
-                sleep(1400);
+                robot.strafeRight(0.65);
+                sleep(600);
                 robot.straightDrive(0, 0);
+                sleep(2000);
+
+                robot.turnToHeading(blueNegativeFactor * 90, 0.65);
+                sleep(1000);
+//                robot.moveDistance(-200, 0.5);
+//                sleep(2000);
+//
+//                robot.straightDrive(-0.3, -0.3);
+//                sleep(1400);
+//                robot.straightDrive(0, 0);
             }
 
-            ///
+            robot.glyphArms(Robot.GLYPH_ARM_LEFT_OPEN, Robot.GLYPH_ARM_RIGHT_OPEN);
             sleep(200);
-            ///
+
 
             robot.straightDrive(-0.3, -0.3);
             sleep(1000);
-            robot.glyphArms(Robot.GLYPH_ARM_LEFT_OPEN, Robot.GLYPH_ARM_RIGHT_OPEN);
             robot.straightDrive(0.3, 0.3);
             sleep(500);
             robot.straightDrive(-0.3, -0.3);
