@@ -143,73 +143,22 @@ public abstract class AutonomousOperation extends LinearOpMode {
             }
 
             if (getBalancingStonePosition() == BalancingStonePosition.CLOSE) {
-//                robot.straightDrive(-0.4, -0.4);
-//                sleep(600);
-//                robot.straightDrive(0.0, 0.0);
+                robot.moveDistance(-900, 0.5);
+                sleep(1000);
 
-                robot.lift(-0.5);
-                sleep(200);
+                robot.turnToHeading(blueNegativeFactor * -90, 0.65);
+                sleep(1000);
 
-                if (getAlliance() == Alliance.RED) {
-                    robot.leftMotors(-0.4);
-                    robot.rightMotors(0.4);
-                    sleep(700);
-                    robot.leftMotors(0);
-                    robot.rightMotors(0);
-                } else {
-                    robot.leftMotors(0.4);
-                    robot.rightMotors(-0.4);
-                    sleep(700);
-                    robot.leftMotors(0);
-                    robot.rightMotors(0);
-                }
-                robot.lift(-0.4);
-                robot.leftMotors(0.0);
-                robot.rightMotors(0.0);
+                robot.moveDistance(-1800, 0.5);
+                sleep(1000);
 
-                sleep(200);
-                robot.lift(0.0);
+                robot.turnToHeading(179, 0.65);
+                sleep(1000);
 
-                ///
-                sleep(200);
-                ///
-
-                robot.straightDrive(-0.4, -0.4);
-                sleep((getAlliance() == Alliance.RED ? 675 : 725));
+                robot.straightDrive(-0.3, -0.3);
+                sleep(1400);
                 robot.straightDrive(0, 0);
-
-                ///
-                sleep(200);
-                ///
-
-                if (getAlliance() == Alliance.RED) {
-                    robot.leftMotors(-0.4);
-                    robot.rightMotors(0.4);
-                    sleep(900); // turn duration
-                    robot.leftMotors(0);
-                    robot.rightMotors(0);
-                } else {
-                    robot.leftMotors(0.4);
-                    robot.rightMotors(-0.4);
-                    sleep(900); //turn duration
-                    robot.leftMotors(0);
-                    robot.rightMotors(0);
-                }
             } else {
-                int firstStrafeTime;
-                int secondStrafeTime;
-
-                if (vuMark == RelicRecoveryVuMark.LEFT) {
-                    firstStrafeTime = 1000;
-                    secondStrafeTime = 400;
-                } else if (vuMark == RelicRecoveryVuMark.CENTER || vuMark == RelicRecoveryVuMark.UNKNOWN) {
-                    firstStrafeTime = 900;
-                    secondStrafeTime = 300;
-                } else { // vuMark == RelicRecoveryVuMark.RIGHT
-                    firstStrafeTime = 700;
-                    secondStrafeTime = 300;
-                }
-
                 robot.moveDistance(-900, 0.5);
                 sleep(1000);
 
