@@ -152,7 +152,7 @@ public abstract class AutonomousOperation extends LinearOpMode {
                 robot.moveDistance(-1800, 0.5);
                 sleep(1000);
 
-                robot.turnToHeading(179, 0.65);
+                robot.turnToHeading(blueNegativeFactor * 179, 0.65);
                 sleep(1000);
 
                 robot.moveDistance(-900, 0.5);
