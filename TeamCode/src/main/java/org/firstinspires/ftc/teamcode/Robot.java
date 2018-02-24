@@ -85,7 +85,7 @@ public class Robot {
         parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu 1");
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
     }
 
@@ -135,19 +135,24 @@ public class Robot {
         liftMotor.setPower(power);
     }
 
-    public double getHeading() {
+    public float getHeading() {
         return imu.getAngularOrientation().firstAngle;
     }
 
+    public float get360Heading() {
+        return imu.getAngularOrientation().firstAngle;
+    }
+
+
     public void turnToHeading(int targetHeading, double power) {
-        double currentHeading = getHeading();
+        float currentHeading = getHeading();
         boolean turnLeft = (targetHeading - currentHeading > 0 ? true : false);
         while (opModeIsActive()) {
             telemetry.addData("hdg", currentHeading);
             telemetry.update();
 
             double currentSpeed = power;
-            double distanceTo = Math.abs(targetHeading - currentHeading);
+            float distanceTo = Math.abs(targetHeading - currentHeading);
             double minimumSpeed = 0.2f;
             double minimumLeftSpeed = (turnLeft ? -minimumSpeed : minimumSpeed);
             double minimumRightSpeed = (turnLeft ? minimumSpeed : -minimumSpeed);

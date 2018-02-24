@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.util;
 
-/**
- * Created by student on 2/23/18.
- */
-
 public class MathUtil {
+    public float convertTo360Heading(float h) {
+        if (h < 0) {
+            return h + 180;
+        } else {
+            return h;
+        }
+    }
 }
