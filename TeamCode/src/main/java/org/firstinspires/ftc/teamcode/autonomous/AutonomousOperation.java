@@ -155,9 +155,16 @@ public abstract class AutonomousOperation extends LinearOpMode {
                 robot.turnToHeading(179, 0.65);
                 sleep(1000);
 
-                robot.straightDrive(-0.3, -0.3);
-                sleep(1400);
-                robot.straightDrive(0, 0);
+                robot.moveDistance(-900, 0.5);
+                sleep(1000);
+
+                if (vuMark == RelicRecoveryVuMark.LEFT) {
+                    robot.turnToHeading(blueNegativeFactor * -117, 0.65);
+                    sleep(1000);
+                } else if (vuMark == RelicRecoveryVuMark.RIGHT) {
+                    robot.turnToHeading(blueNegativeFactor * -63, 0.65);
+                    sleep(1000);
+                }
             } else {
                 robot.moveDistance(-900, 0.5);
                 sleep(1000);
@@ -185,11 +192,11 @@ public abstract class AutonomousOperation extends LinearOpMode {
                     robot.turnToHeading(blueNegativeFactor * -117, 0.65);
                     sleep(1000);
                 }
-
-                robot.straightDrive(-0.3, -0.3);
-                sleep(1400);
-                robot.straightDrive(0, 0);
             }
+
+            robot.straightDrive(-0.3, -0.3);
+            sleep(1400);
+            robot.straightDrive(0, 0);
 
             robot.glyphArms(Robot.GLYPH_ARM_LEFT_OPEN, Robot.GLYPH_ARM_RIGHT_OPEN);
             sleep(200);
