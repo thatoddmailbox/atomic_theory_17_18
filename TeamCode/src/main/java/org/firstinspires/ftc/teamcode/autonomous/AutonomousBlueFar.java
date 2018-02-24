@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.misc.Alliance;
 import org.firstinspires.ftc.teamcode.misc.BalancingStonePosition;
 
-@Autonomous(name="Autonomous BLUE (far)", group="Tests")
+@Autonomous(name="Autonomous BLUE (far)")
 public class AutonomousBlueFar extends AutonomousOperation {
     public Alliance getAlliance() {
         return Alliance.BLUE;
