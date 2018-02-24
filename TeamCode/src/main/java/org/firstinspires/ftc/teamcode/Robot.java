@@ -113,17 +113,17 @@ public class Robot {
     }
 
     public void strafeLeft(double power) {
-        frontLeft.setPower(power);
-        frontRight.setPower(-power);
-        backLeft.setPower(-power);
-        backRight.setPower(power);
-    }
-
-    public void strafeRight(double power) {
         frontLeft.setPower(-power);
         frontRight.setPower(power);
         backLeft.setPower(power);
         backRight.setPower(-power);
+    }
+
+    public void strafeRight(double power) {
+        frontLeft.setPower(power);
+        frontRight.setPower(-power);
+        backLeft.setPower(-power);
+        backRight.setPower(power);
     }
 
     public void glyphArms(double left, double right) {
@@ -139,11 +139,6 @@ public class Robot {
         return imu.getAngularOrientation().firstAngle;
     }
 
-    public float get360Heading() {
-        return imu.getAngularOrientation().firstAngle;
-    }
-
-
     public void turnToHeading(int targetHeading, double power) {
         float currentHeading = getHeading();
         boolean turnLeft = (targetHeading - currentHeading > 0 ? true : false);
@@ -153,9 +148,9 @@ public class Robot {
 
             double currentSpeed = power;
             float distanceTo = Math.abs(targetHeading - currentHeading);
-            double minimumSpeed = 0.2f;
-            double minimumLeftSpeed = (turnLeft ? -minimumSpeed : minimumSpeed);
-            double minimumRightSpeed = (turnLeft ? minimumSpeed : -minimumSpeed);
+            double minimumSpeed = 0.3f;
+            double minimumLeftSpeed = (turnLeft ? minimumSpeed : -minimumSpeed);
+            double minimumRightSpeed = (turnLeft ? -minimumSpeed : minimumSpeed);
 
             if (distanceTo < 10) {
                 currentSpeed *= 0.20;
@@ -168,13 +163,13 @@ public class Robot {
                 currentSpeed = Math.min(currentSpeed, 0.8f);
             }
 
-            leftMotors(Math.max(minimumLeftSpeed, (turnLeft ? -currentSpeed : currentSpeed)));
-            rightMotors(Math.max(minimumRightSpeed, (turnLeft ? currentSpeed : -currentSpeed)));
+            leftMotors(Math.max(minimumLeftSpeed, (turnLeft ? currentSpeed : -currentSpeed)));
+            rightMotors(Math.max(minimumRightSpeed, (turnLeft ? -currentSpeed : currentSpeed)));
 
             currentHeading = getHeading();
 
             turnLeft = (targetHeading - currentHeading > 0 ? true : false);
-            if (targetHeading == currentHeading) {
+            if (distanceTo < 1.5) {
                 break;
             }
 
