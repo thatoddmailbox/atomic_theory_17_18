@@ -159,10 +159,10 @@ public abstract class AutonomousOperation extends LinearOpMode {
                 sleep(1000);
 
                 if (vuMark == RelicRecoveryVuMark.LEFT) {
-                    robot.turnToHeading(blueNegativeFactor * -117, 0.65);
+                    robot.turnToHeading(blueNegativeFactor * 180 - 27, 0.65);
                     sleep(1000);
                 } else if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                    robot.turnToHeading(blueNegativeFactor * -63, 0.65);
+                    robot.turnToHeading(blueNegativeFactor * -180 + 27, 0.65);
                     sleep(1000);
                 }
             } else {
