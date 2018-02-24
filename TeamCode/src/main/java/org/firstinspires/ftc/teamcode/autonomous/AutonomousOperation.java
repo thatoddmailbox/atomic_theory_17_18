@@ -210,27 +210,40 @@ public abstract class AutonomousOperation extends LinearOpMode {
                     secondStrafeTime = 300;
                 }
 
-                robot.moveDistance(-400, 0.5);
+                robot.moveDistance(-900, 0.5);
                 sleep(1000);
 
                 robot.strafeRight(0.65);
-                sleep(600);
+                sleep(1100);
                 robot.straightDrive(0, 0);
-                sleep(2000);
-
-                robot.turnToHeading(blueNegativeFactor * 90, 0.65);
                 sleep(1000);
-//                robot.moveDistance(-200, 0.5);
-//                sleep(2000);
-//
-//                robot.straightDrive(-0.3, -0.3);
-//                sleep(1400);
-//                robot.straightDrive(0, 0);
+
+                robot.turnToHeading(blueNegativeFactor * -90, 0.65);
+                sleep(1000);
+
+                robot.moveDistance(-450, 0.5);
+                sleep(1000);
+
+                if (vuMark == RelicRecoveryVuMark.CENTER) {
+                    robot.strafeRight(0.65);
+                    sleep(700);
+                    robot.straightDrive(0, 0);
+                } else if (vuMark == RelicRecoveryVuMark.LEFT) {
+                    robot.strafeRight(0.65);
+                    sleep(700);
+                    robot.straightDrive(0, 0);
+
+                    robot.turnToHeading(blueNegativeFactor * -117, 0.65);
+                    sleep(1000);
+                }
+
+                robot.straightDrive(-0.3, -0.3);
+                sleep(1400);
+                robot.straightDrive(0, 0);
             }
 
             robot.glyphArms(Robot.GLYPH_ARM_LEFT_OPEN, Robot.GLYPH_ARM_RIGHT_OPEN);
             sleep(200);
-
 
             robot.straightDrive(-0.3, -0.3);
             sleep(1000);
