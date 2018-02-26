@@ -152,45 +152,76 @@ public abstract class AutonomousOperation extends LinearOpMode {
                 robot.moveDistance(-1800, 0.5);
                 sleep(1000);
 
-                robot.turnToHeading(blueNegativeFactor * 179, 0.65);
+                robot.turnToHeading((robot.getHeading() < 0 ? -1 : 1) * 179, 0.65);
                 sleep(1000);
 
-                robot.moveDistance(-900, 0.5);
+                robot.moveDistance(-1000, 0.5);
                 sleep(1000);
 
                 if (vuMark == RelicRecoveryVuMark.LEFT) {
-                    robot.turnToHeading(blueNegativeFactor * 180 - 27, 0.65);
-                    sleep(1000);
+                    robot.strafeRight(0.65);
+                    sleep(800);
+                    robot.straightDrive(0, 0);
+//                    robot.turnToHeading(blueNegativeFactor * 180 - 27, 0.65);
+//                    sleep(1000);
                 } else if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                    robot.turnToHeading(blueNegativeFactor * -180 + 27, 0.65);
-                    sleep(1000);
+                    robot.strafeLeft(0.65);
+                    sleep(800);
+                    robot.straightDrive(0, 0);
+//                    robot.turnToHeading(blueNegativeFactor * -180 + 27, 0.65);
+//                    sleep(1000);
                 }
             } else {
-                robot.moveDistance(-900, 0.5);
-                sleep(1000);
+                robot.moveDistance(-1100, 0.5);
+                sleep(500);
 
-                robot.strafeRight(0.65);
-                sleep(1100);
+                robot.strafeLeft(blueNegativeFactor * 0.65);
+                sleep(1300);
                 robot.straightDrive(0, 0);
-                sleep(1000);
+                sleep(500);
 
                 robot.turnToHeading(blueNegativeFactor * -90, 0.65);
-                sleep(1000);
+                sleep(500);
 
                 robot.moveDistance(-450, 0.5);
-                sleep(1000);
+                sleep(500);
 
-                if (vuMark == RelicRecoveryVuMark.CENTER) {
-                    robot.strafeRight(0.65);
-                    sleep(700);
-                    robot.straightDrive(0, 0);
-                } else if (vuMark == RelicRecoveryVuMark.LEFT) {
-                    robot.strafeRight(0.65);
-                    sleep(700);
-                    robot.straightDrive(0, 0);
+                robot.turnToHeading(blueNegativeFactor * -90, 0.65);
+                sleep(500);
 
-                    robot.turnToHeading(blueNegativeFactor * -117, 0.65);
-                    sleep(1000);
+                if (getAlliance() == Alliance.BLUE) {
+                    // we are at the right column
+                    if (vuMark == RelicRecoveryVuMark.CENTER) {
+                        robot.strafeRight(0.65);
+                        sleep(700);
+                        robot.straightDrive(0, 0);
+                    } else if (vuMark == RelicRecoveryVuMark.LEFT) {
+                        robot.strafeRight(0.65);
+                        sleep(1050);
+                        robot.straightDrive(0, 0);
+                    }
+                } else {
+                    robot.strafeLeft(blueNegativeFactor * 0.65);
+                    sleep(1100);
+                    robot.straightDrive(0, 0);
+                    sleep(500);
+
+                    robot.turnToHeading(blueNegativeFactor * -90, 0.65);
+                    sleep(500);
+
+                    // we are at the right column
+                    if (vuMark == RelicRecoveryVuMark.CENTER) {
+                        robot.strafeRight(0.65);
+                        sleep(700);
+                        robot.straightDrive(0, 0);
+                    } else if (vuMark == RelicRecoveryVuMark.LEFT) {
+                        robot.strafeRight(0.65);
+                        sleep(700);
+                        robot.straightDrive(0, 0);
+
+                        robot.turnToHeading(blueNegativeFactor * -63, 0.65);
+                        sleep(1000);
+                    }
                 }
             }
 

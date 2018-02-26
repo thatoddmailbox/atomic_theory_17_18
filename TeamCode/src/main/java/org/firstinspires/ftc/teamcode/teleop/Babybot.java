@@ -288,7 +288,7 @@ public class Babybot extends OpMode
         if(gamepad2.left_stick_button){
             relicClawClose.setPosition(1.0);
         } else if(gamepad2.right_stick_button){
-            relicClawClose.setPosition(0.3);
+            relicClawClose.setPosition(0.0);
         }
         if (gamepad1.left_stick_button || gamepad1.right_stick_button) {
             jewelArmServo.setPosition(Robot.JEWEL_ARM_UP);
